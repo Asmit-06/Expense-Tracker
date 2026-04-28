@@ -2,17 +2,16 @@ import express from "express";
 import cors from "cors";
 import ConnectDB from "./config/db.js"
 import dotenv from "dotenv";
+import transactionRoutes from "./routes/transactionRoutes.js";
 dotenv.config();
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use("/api/transactions", transactionRoutes);
 
 
-app.get("/",(req,res)=>{
-  res.send("hello world");
-})
 
-const PORT = 3000 || process.env.PORT;
+const PORT = process.env.PORT || 3000;
 const start = async()=>{
   try{
     await ConnectDB();

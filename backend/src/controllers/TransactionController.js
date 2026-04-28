@@ -18,7 +18,7 @@ const addTransaction = async(req,res)=>{
   }
 }
 
-const deletedTransaction = async(req,res)=>{
+const deleteTransaction = async(req,res)=>{
   try{
     const deletedtransaction = await Transaction.findByIdAndDelete(req.params.id);
     if(!deletedtransaction){
@@ -42,4 +42,4 @@ const getTransactionById = async(req,res)=>{
   }
 }
 
-export {getAllTransactions, addTransaction, deletedTransaction, getTransactionById};
+export {getAllTransactions, addTransaction, deleteTransaction, getTransactionById};
