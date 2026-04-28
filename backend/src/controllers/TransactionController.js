@@ -30,6 +30,22 @@ const deleteTransaction = async(req,res)=>{
   }
 }
 
+const updateTransaction = async(req,res)=>{
+  try{
+    const {id} = req.params;
+    const {amount,title,type,category,date} = req.body;
+  
+    const updatedNote = await Transaction.findByIdAndUpdate(id,{amount,title,type,category,date},{new : true});
+    if(!updatedNote){
+      return res.status(404).json({message:"Transaction not found"});
+    }
+    res.status(200).json({message:"Transaction updated successfully", data:updatedNote});
+  }catch(err){
+    res.status(500).json({message:"Error updating transaction", error:err.message});
+  }
+
+}
+
 const getTransactionById = async(req,res)=>{
   try{
     const transaction = await Transaction.findById(req.params.id);
@@ -42,4 +58,4 @@ const getTransactionById = async(req,res)=>{
   }
 }
 
-export {getAllTransactions, addTransaction, deleteTransaction, getTransactionById};
+export {getAllTransactions, addTransaction, deleteTransaction, getTransactionById, updateTransaction};
