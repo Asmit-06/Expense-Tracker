@@ -86,7 +86,7 @@ export function Sidebar() {
         </div>
       </div>
 
-      <div className="balance flex flex-col gap-2 px-6 py-6 border border-gray-200 rounded-[10px] ml-2">
+      <div className="balance flex flex-col gap-2 px-6 py-6 border border-gray-200 rounded-[10px] mx-4">
         <div className="flex gap-4 items-center">
           <Wallet
             className=" size-8 bg-blue-100 px-2 py-2 rounded-[3px]"
