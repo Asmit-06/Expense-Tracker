@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 import { useState } from "react";
-export function Sidebar() {
+export function Sidebar({toggleModal}) {
   const [active, setActive] = useState(0);
   const handleActive = (index) => {
   
@@ -55,7 +55,7 @@ export function Sidebar() {
           }
           onClick={()=>handleActive(2)}>
           <Plus className=" size-6 " strokeWidth={2} />
-          <h2 className="text-[16px]">Add Transaction</h2>
+          <h2 className="text-[16px]" onClick={toggleModal}>Add Transaction</h2>
         </div>
         <div className={
             active ===3
