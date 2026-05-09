@@ -30,6 +30,19 @@ export function DashBoard(){
     const closeModal = ()=>{
       setisOpen(false);
     }
+
+    const deleteTransaction = async(id)=>{
+      try{
+        await axios.delete(`http://localhost:3000/api/transactions/${id}`);
+        fetchTransactions();
+
+      }catch(err){
+        console.log("Error deleting transaction", err);
+
+      }
+
+    }
+
     useEffect(()=>{
       fetchTransactions();
     
@@ -42,7 +55,7 @@ export function DashBoard(){
       <main className="flex-1 bg-gray-100 py-8 px-10">
         <Header  toggleModal={toggleModal}/>
         <Summary/>
-        <TransactionTable transactions={transactions} fetchTransactions={fetchTransactions}/>
+        <TransactionTable transactions={transactions} fetchTransactions={fetchTransactions} deleteTransaction={deleteTransaction}/>
         {isOpen && <AddTransactionModal closeModal={closeModal} fetchTransactions={fetchTransactions}/>}
       </main>
      

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { TransactionRow } from "./TransactionRow";
 import axios from "axios";
-export function TransactionTable({transactions,fetchTransactions}) {
+export function TransactionTable({transactions,fetchTransactions,deleteTransaction}) {
  
  
 
@@ -28,7 +28,7 @@ export function TransactionTable({transactions,fetchTransactions}) {
       
       {transactions.slice(0,5).map((t) => (
         <>
-          <TransactionRow key={t._id} transaction={t} />
+          <TransactionRow key={t._id} transaction={t} deleteTransaction={deleteTransaction}  />
           <hr className="text-gray-200" />
         </>
       ))}

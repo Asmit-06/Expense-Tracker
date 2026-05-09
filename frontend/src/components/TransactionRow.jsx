@@ -1,6 +1,7 @@
 import { IndianRupeeIcon,Edit,Trash } from "lucide-react";
-
-export function TransactionRow({ transaction }) {
+import axios from "axios";
+export function TransactionRow({ transaction,deleteTransaction }) {
+  
   return (
     <div className="flex justify-between font-semibold text-[15px] px-3 py-5 items-center bg-white">
       <p>{new Date(transaction.date).toDateString()}</p>
@@ -19,7 +20,7 @@ export function TransactionRow({ transaction }) {
 
       <div className="flex gap-6 items-center cursor-pointer">
         <Edit color="gray" />
-        <Trash color="red" />
+        <Trash color="red" onClick={()=>deleteTransaction(transaction._id)} />
       </div>
     </div>
   );
