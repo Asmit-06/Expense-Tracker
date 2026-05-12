@@ -5,15 +5,24 @@ import { TransactionTable } from "../components/TransactionTable";
 import { AddTransactionModal } from "../components/AddTransactionModal";
 import { useEffect,useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 export function DashBoard(){
+
+  const[selectedTransaction,setSelectedTransaction] = useState(null);
+  const handleEdit = (transaction)=>{
+    setSelectedTransaction(transaction);
+    toggleModal();
+  }
+
   //all transactions
   const [transactions, setTransactions] = useState([]);
   
     const fetchTransactions = async()=>{
       try{
         const res = await axios.get("http://localhost:3000/api/transactions");
-        
+    
         setTransactions(res.data.data);
+       
         
       }
       catch(err){
@@ -32,9 +41,11 @@ export function DashBoard(){
     }
 
     const deleteTransaction = async(id)=>{
+      if(!window.confirm("Are you sure you want to delete this transaction?"))return;
       try{
         await axios.delete(`http://localhost:3000/api/transactions/${id}`);
         fetchTransactions();
+        toast.success("Transaction deleted successfully");
 
       }catch(err){
         console.log("Error deleting transaction", err);
@@ -55,8 +66,8 @@ export function DashBoard(){
       <main className="flex-1 bg-gray-100 py-8 px-10">
         <Header  toggleModal={toggleModal}/>
         <Summary/>
-        <TransactionTable transactions={transactions} fetchTransactions={fetchTransactions} deleteTransaction={deleteTransaction}/>
-        {isOpen && <AddTransactionModal closeModal={closeModal} fetchTransactions={fetchTransactions}/>}
+        <TransactionTable transactions={transactions} fetchTransactions={fetchTransactions} deleteTransaction={deleteTransaction} handleEdit={handleEdit}/>
+        {isOpen && <AddTransactionModal closeModal={closeModal} fetchTransactions={fetchTransactions} selectedTransaction={selectedTransaction}/>}
       </main>
      
     </div>

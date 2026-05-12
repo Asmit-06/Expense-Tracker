@@ -1,8 +1,15 @@
+import { Toaster } from "react-hot-toast"
 import { DashBoard } from "./pages/DashBoard"
 
 
 function App() {
- return <DashBoard/>
+
+ return (<>
+  <Toaster/>
+ <DashBoard/>
+ </>
+)
+
 }
 
 export default App

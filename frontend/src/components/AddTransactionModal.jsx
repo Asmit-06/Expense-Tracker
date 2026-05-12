@@ -1,6 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
-export function AddTransactionModal({ closeModal, fetchTransactions }) {
+import toast from "react-hot-toast";
+export function AddTransactionModal({ closeModal, fetchTransactions,selectedTransaction})  {
+   
+  const isEditMode = Boolean(selectedTransaction);
+ 
   const [formData, setFormData] = useState({
     title: "",
     amount: "",
@@ -8,6 +12,25 @@ export function AddTransactionModal({ closeModal, fetchTransactions }) {
     type: "",
     date: "",
   });
+  useEffect(()=>{
+    if(isEditMode){
+      setFormData({
+        title: selectedTransaction.title,
+        amount: selectedTransaction.amount,
+        category: selectedTransaction.category,
+        type: selectedTransaction.type,
+        date: selectedTransaction.date.split("T")[0],
+      })
+    }else{
+      setFormData({
+        title: "",
+        amount: "",
+        category: "",
+        type: "",
+        date: "",
+      })
+    }
+  },[selectedTransaction])
 
   const handleChange = (e)=>{
     const {name,value} = e.target;
@@ -21,9 +44,22 @@ export function AddTransactionModal({ closeModal, fetchTransactions }) {
   const handleSubmit = async(e)=>{
     e.preventDefault();
     try{
+      if(!formData.title || !formData.amount || !formData.category || !formData.type || !formData.date){
+        toast.error("Please fill all the fields");
+        return;
+      }
+      if(isEditMode){
+        await axios.put(`http://localhost:3000/api/transactions/${selectedTransaction._id}`,formData)
+        toast.success("Transaction updated successfully");
+        closeModal();
+        fetchTransactions();
+
+        return;
+      }
       await axios.post("http://localhost:3000/api/transactions", formData);
       closeModal();
       fetchTransactions();
+      toast.success("Transaction added successfully");
     }catch(err){
       console.log("Error adding transaction", err);
     }
@@ -31,9 +67,9 @@ export function AddTransactionModal({ closeModal, fetchTransactions }) {
 
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center">
+    <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center" onClick={closeModal}>
       <div className="bg-white p-5 rounded-lg w-[400px]">
-        <h2 className="text-xl font-bold mb-4">Add Transaction</h2>
+        <h2 className="text-xl font-bold mb-4">{isEditMode?"Update Transaction":"Add Transaction"}</h2>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <input
             type="text"
@@ -76,7 +112,7 @@ export function AddTransactionModal({ closeModal, fetchTransactions }) {
               className="bg-blue-500 text-white py-2 px-3 rounded cursor-pointer"
             
             >
-              Submit
+              {isEditMode ? "Update" : "Add"}
             </button>
             <button
               type="button"
