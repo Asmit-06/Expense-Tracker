@@ -1,5 +1,5 @@
 import { IndianRupee, Wallet2, TrendingUp, TrendingDown ,FileText} from "lucide-react";
-export function StatCard() {
+export function StatCard({income, expense, balance,totalNoOfTransactions}) {
   return (
     <>
       <div className="stat-card  bg-white shadow-sm  rounded-lg p-6 flex  gap-4 items-center relative">
@@ -9,7 +9,7 @@ export function StatCard() {
           </h3>
           <div className="flex items-center">
             <IndianRupee />
-            <p className="text-[27px] font-bold ">50000.00</p>
+            <p className="text-[27px] font-bold ">{balance}</p>
           </div>
 
           <p className="font-semibold text-gray-600">
@@ -28,7 +28,7 @@ export function StatCard() {
           </h3>
           <div className="flex items-center">
             <IndianRupee />
-            <p className="text-[27px] font-bold ">45000.00</p>
+            <p className="text-[27px] font-bold ">{income}</p>
           </div>
 
           <p className="font-semibold text-gray-600">
@@ -47,8 +47,8 @@ export function StatCard() {
           </h3>
           <div className="flex items-center">
             <IndianRupee />
-            <p className="text-[27px] font-bold ">4000.00</p>
-          </div>
+            <p className="text-[27px] font-bold "> {expense} </p>
+          </div> 
 
           <p className="font-semibold text-gray-600">
             <span className="text-red-500 font-semibold">- 12.5% </span> from
@@ -66,7 +66,7 @@ export function StatCard() {
           </h3>
           <div className="flex items-center">
             
-            <p className="text-[27px] font-bold ">28</p>
+            <p className="text-[27px] font-bold ">{totalNoOfTransactions}</p>
           </div>
 
           <p className="font-semibold text-gray-600">

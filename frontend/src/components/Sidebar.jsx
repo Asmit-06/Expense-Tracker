@@ -9,7 +9,7 @@ import {
 } from "lucide-react";
 
 import { useState } from "react";
-export function Sidebar({toggleModal}) {
+export function Sidebar({toggleModal,balance}) {
   const [active, setActive] = useState(0);
   const handleActive = (index) => {
   
@@ -97,7 +97,7 @@ export function Sidebar({toggleModal}) {
         </div>
         <div className="flex items-center">
           <IndianRupee className="size-7" />
-          <h1 className="text-3xl font-bold">24,500.00</h1>
+          <h1 className="text-3xl font-bold">{balance}</h1>
         </div>
         <p>Total Balance</p>
       </div>

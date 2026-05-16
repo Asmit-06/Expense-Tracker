@@ -54,18 +54,52 @@ export function DashBoard(){
 
     }
 
+    //calculate summary
+
+    const totalIncome = ()=>{
+      return transactions.reduce((acc,transaction)=>{
+        if(transaction.type === "income"){
+          return acc + transaction.amount;
+        }else{
+          return acc;
+        }
+      },0)
+
+    }
+
+    const totalExpense = ()=>{
+      return transactions.reduce((acc,transaction)=>{
+        if(transaction.type === "expense"){
+          return acc + transaction.amount;
+        
+
+        }
+        else{
+          return acc;
+        }
+      },0)
+    }
+
+    const totalTransactions =()=>{
+      return transactions.length;
+    }
+
+    const income = totalIncome();
+    const expense = totalExpense();
+    const totalNoOfTransactions = totalTransactions();
+
+
     useEffect(()=>{
       fetchTransactions();
     
     },[])
-
-
+  
   return (
     <div className="app-layout flex min-h-screen ">
-      <Sidebar toggleModal={toggleModal} />
+      <Sidebar toggleModal={toggleModal} balance={income-expense}/>
       <main className="flex-1 bg-gray-100 py-8 px-10">
         <Header  toggleModal={toggleModal}/>
-        <Summary/>
+        <Summary income={income} expense={expense} balance={income-expense} totalNoOfTransactions={totalNoOfTransactions} />
         <TransactionTable transactions={transactions} fetchTransactions={fetchTransactions} deleteTransaction={deleteTransaction} handleEdit={handleEdit}/>
         {isOpen && <AddTransactionModal closeModal={closeModal} fetchTransactions={fetchTransactions} selectedTransaction={selectedTransaction}/>}
       </main>
