@@ -84,6 +84,7 @@ export function AddTransactionModal({ closeModal, fetchTransactions,selectedTran
             placeholder="Amount"
             className="border p-2 rounded"
             min={1}
+            max={9999999}
             name="amount"
             value = {formData.amount}
             onChange={handleChange}

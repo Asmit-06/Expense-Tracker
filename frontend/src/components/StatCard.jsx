@@ -1,5 +1,5 @@
 import { IndianRupee, Wallet2, TrendingUp, TrendingDown ,FileText} from "lucide-react";
-export function StatCard({income, expense, balance,totalNoOfTransactions}) {
+export function StatCard({income, expense, balance,totalNoOfTransactions,monthlyIncomePercentage,monthlyExpensePercentage,monthlyBalancePercentage,transactionDiff}) {
   return (
     <>
       <div className="stat-card  bg-white shadow-sm  rounded-lg p-6 flex  gap-4 items-center relative">
@@ -13,8 +13,10 @@ export function StatCard({income, expense, balance,totalNoOfTransactions}) {
           </div>
 
           <p className="font-semibold text-gray-600">
-            <span className="text-green-500 font-semibold">+ 12.5% </span> from
-            last month{" "}
+            <span className={`font-semibold ${monthlyBalancePercentage >=0 ? "text-green-500":"text-red-500"}`}>
+            {monthlyBalancePercentage >= 0 ? "+" : "-"}
+            {Math.abs(monthlyBalancePercentage).toFixed(1)}%
+             </span> from last month{" "}
           </p>
         </div>
         <div className="bg-blue-100 p-4 rounded-4xl absolute right-8 top-8">
@@ -32,8 +34,10 @@ export function StatCard({income, expense, balance,totalNoOfTransactions}) {
           </div>
 
           <p className="font-semibold text-gray-600">
-            <span className="text-green-500 font-semibold">+ 8.5% </span> from
-            last month{" "}
+            <span className={`font-semibold ${monthlyIncomePercentage >=0 ? "text-green-500":"text-red-500"}`}>
+            {monthlyIncomePercentage >= 0 ? "+" : "-"}
+            {Math.abs(monthlyIncomePercentage).toFixed(1)}%
+             </span> from last month{" "}
           </p>
         </div>
         <div className="bg-green-400 p-4 rounded-4xl absolute right-8 top-8">
@@ -50,9 +54,12 @@ export function StatCard({income, expense, balance,totalNoOfTransactions}) {
             <p className="text-[27px] font-bold "> {expense} </p>
           </div> 
 
+         
           <p className="font-semibold text-gray-600">
-            <span className="text-red-500 font-semibold">- 12.5% </span> from
-            last month{" "}
+            <span className={`font-semibold ${monthlyExpensePercentage >=0 ? "text-green-500":"text-red-500"}`}>
+            {monthlyExpensePercentage >= 0 ? "+" : "-"}
+            {Math.abs(monthlyExpensePercentage).toFixed(1)}%
+             </span> from last month{" "}
           </p>
         </div>
         <div className="bg-red-400 p-4 rounded-4xl absolute right-8 top-8">
@@ -69,9 +76,12 @@ export function StatCard({income, expense, balance,totalNoOfTransactions}) {
             <p className="text-[27px] font-bold ">{totalNoOfTransactions}</p>
           </div>
 
+         
           <p className="font-semibold text-gray-600">
-            <span className="text-blue-600 font-semibold">+ 4 </span> from
-            last month{" "}
+            <span className={`font-semibold ${transactionDiff >=0 ? "text-green-500":"text-red-500"}`}>
+            {transactionDiff >= 0 ? "+" : "-"}
+            {Math.abs(transactionDiff)}
+             </span> from last month{" "}
           </p>
         </div>
         <div className="bg-blue-500 p-4 rounded-4xl absolute right-8 top-8">
