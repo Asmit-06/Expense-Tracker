@@ -9,6 +9,7 @@ import {
 } from "lucide-react";
 
 import { useState } from "react";
+import { Link } from "react-router-dom";
 export function Sidebar({toggleModal,balance,handleAddTransaction}) {
   const [active, setActive] = useState(0);
   const handleActive = (index) => {
@@ -46,7 +47,9 @@ export function Sidebar({toggleModal,balance,handleAddTransaction}) {
           onClick={()=>handleActive(1)}
         >
           <Wallet className=" size-6 " strokeWidth={2} />
-          <h2 className="text-[16px]">Transactions</h2>
+          <Link to="/transactions">
+          <h2 className="text-[16px]">Transactions</h2></Link>
+          
         </div>
         <div className={
             active ===2

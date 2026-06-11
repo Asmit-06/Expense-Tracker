@@ -291,6 +291,8 @@ export function DashBoard() {
 
   const monthlyBalancePercentage =
     currentMonthBalancePercentage();
+
+  const recentTransactions = transactions.slice(0,5);
   
   const transactionDiff = currentMonthTotalTransactions - previousMonthTotalTransactions;
   useEffect(() => {
@@ -327,10 +329,11 @@ export function DashBoard() {
         />
 
         <TransactionTable
-          transactions={transactions}
+          transactions={recentTransactions}
           fetchTransactions={fetchTransactions}
           deleteTransaction={deleteTransaction}
           handleEdit={handleEdit}
+          showViewAll={true}
         />
 
         {isOpen && (

@@ -48,6 +48,9 @@ export function AddTransactionModal({ closeModal, fetchTransactions,selectedTran
         toast.error("Please fill all the fields");
         return;
       }
+      if(formData.amount>9999999){
+        toast.error("Amount should be less than 9999999");
+      }
       if(isEditMode){
         await axios.put(`http://localhost:3000/api/transactions/${selectedTransaction._id}`,formData)
         toast.success("Transaction updated successfully");
