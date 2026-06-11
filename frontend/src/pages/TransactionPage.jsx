@@ -37,6 +37,12 @@ export function TransactionPage() {
     }
   }
 
+  const[search,setSearch] = useState("");
+  const filteredTransactions = transactions.filter((t)=>{
+    return t.title.toLowerCase().includes(search.toLowerCase()) || t.category.toLowerCase().includes(search.toLowerCase()) ||
+    t.type.toLowerCase().includes(search.toLowerCase())
+  })
+
   useEffect(()=>{
     fetchTransactions();
   },[])
@@ -45,7 +51,12 @@ export function TransactionPage() {
     <div className="relative">
     <ArrowLeftIcon className="size-10 cursor-pointer  absolute ml-4 " onClick={()=>window.history.back()} />
     <h1 className="text-2xl text-center mt-3 font-bold uppercase">Transaction Page</h1>
-    <TransactionTable transactions={transactions} showViewAll={false} deleteTransaction={deleteTransaction} handleEdit={handleEdit}  />
+
+    <div className="flex items-center justify-center">
+      <input type="text" placeholder="Search Transactions..." value={search} onChange={(e)=>setSearch(e.target.value)} className="border border-gray-300 mt-3 px-3 rounded-lg outline-none focus:border-blue-400" />
+    </div>
+
+    <TransactionTable transactions={filteredTransactions} showViewAll={false} deleteTransaction={deleteTransaction} handleEdit={handleEdit}  />
 
     {isOpen && <AddTransactionModal selectedTransaction={selectedTransaction} fetchTransactions={fetchTransactions} closeModal={()=>{setIsOpen(false); setSelectedTransaction(null)}} />}
     </div>
