@@ -18,19 +18,19 @@ export function Sidebar({toggleModal,balance,handleAddTransaction}) {
     
   };
   return (
-    <div className="sidebar w-full lg:w-64 flex flex-col ">
-      <div className="sidebar-header bg-[#4858E4] px-8 py-8 ">
+    <div className="sidebar w-full lg:w-64 flex flex-col dark:bg-[#0d0f16]">
+      <div className="sidebar-header bg-[#4858E4] px-8 py-8 dark:bg-[#060B2E]">
         <div className="flex text-white gap-4 text-[20px]  items-center">
           <Wallet className=" size-8 " strokeWidth={2} />
           <h2>ExpenseTracker</h2>
         </div>
       </div>
 
-      <div className="main-contents flex flex-col px-8 py-10 gap-12 cursor-pointer mb-40 font-semibold text-gray-500">
+      <div className="main-contents flex flex-col px-8 py-10 gap-12 cursor-pointer mb-40 font-semibold text-gray-500 dark:bg-[#0D0F16]">
         <div
           className={
             active ===0
-              ? `flex items-center content-center gap-4 text-blue-500`
+              ? `flex items-center content-center gap-4 text-blue-500 bg-blue-100 px-4 py-4 rounded-[12px] transition duration-100 dark:bg-[#101929]`
               : `flex items-center content-center gap-4`
           }
           onClick={()=>handleActive(0)}
@@ -41,7 +41,7 @@ export function Sidebar({toggleModal,balance,handleAddTransaction}) {
         <div
           className={
             active ===1
-              ? `flex items-center content-center gap-4 text-blue-500`
+              ? `flex items-center content-center gap-4 text-blue-500 bg-blue-100 px-4 py-4 rounded-[12px] transition duration-100 dark:bg-[#101929] `
               : `flex items-center content-center gap-4`
           }
           onClick={()=>handleActive(1)}
@@ -53,7 +53,7 @@ export function Sidebar({toggleModal,balance,handleAddTransaction}) {
         </div>
         <div className={
             active ===2
-              ? `flex items-center content-center gap-4 text-blue-500`
+              ? `flex items-center content-center gap-4 text-blue-500 bg-blue-100 px-1 py-4 rounded-[12px] transition duration-100 dark:bg-[#101929] `
               : `flex items-center content-center gap-4`
           }
           onClick={()=>handleActive(2)}>
@@ -62,7 +62,7 @@ export function Sidebar({toggleModal,balance,handleAddTransaction}) {
         </div>
         <div className={
             active ===3
-              ? `flex items-center content-center gap-4 text-blue-500`
+              ? `flex items-center content-center gap-4 text-blue-500 bg-blue-100 px-4 py-4 rounded-[12px] transition duration-100 dark:bg-[#101929] `
               : `flex items-center content-center gap-4`
           }
           onClick={()=>handleActive(3)}>
@@ -71,7 +71,7 @@ export function Sidebar({toggleModal,balance,handleAddTransaction}) {
         </div>
         <div className={
             active ===4
-              ? `flex items-center content-center gap-4 text-blue-500`
+              ? `flex items-center content-center gap-4 text-blue-500 bg-blue-100 px-4 py-4 rounded-[12px] transition duration-100 dark:bg-[#101929] `
               : `flex items-center content-center gap-4`
           }
           onClick={()=>handleActive(4)}>
@@ -80,7 +80,7 @@ export function Sidebar({toggleModal,balance,handleAddTransaction}) {
         </div>
         <div className={
             active ===5
-              ? `flex items-center content-center gap-4 text-blue-500`
+              ? `flex items-center content-center gap-4 text-blue-500 bg-blue-100 px-4 py-4 rounded-[12px] transition duration-100 dark:bg-[#101929] `
               : `flex items-center content-center gap-4`
           }
           onClick={()=>handleActive(5)}>
@@ -89,12 +89,13 @@ export function Sidebar({toggleModal,balance,handleAddTransaction}) {
         </div>
       </div>
 
-      <div className="balance flex flex-col gap-2 px-6 py-6 border border-gray-200 rounded-[10px] mx-4">
+      <div className="balance flex flex-col gap-2 px-6 py-6 border border-gray-200 rounded-[10px] mx-4 dark:bg-[#090C11] dark:text-gray-200 dark:border-gray-600">
         <div className="flex gap-4 items-center">
           <Wallet
-            className=" size-8 bg-blue-100 px-2 py-2 rounded-[3px]"
+            className=" size-8 bg-blue-100 px-2 py-2 rounded-[3px] dark:bg-[#101929]"
             strokeWidth={2}
             color="blue"
+            
           />
           <p>Balance</p>
         </div>

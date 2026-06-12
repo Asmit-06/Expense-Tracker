@@ -306,7 +306,7 @@ export function DashBoard() {
         balance={income - expense}
       />
 
-      <main className="flex-1 bg-gray-100 py-8 px-10">
+      <main className="flex-1 bg-gray-100 py-8 px-10 dark:bg-[#06070c] ">
         <Header
           handleAddTransaction={handleAddTransaction}
         />

@@ -57,6 +57,7 @@ export function AddTransactionModal({
       }
       if (formData.amount > 9999999) {
         toast.error("Amount should be less than 9999999");
+        return;
       }
       if (isEditMode) {
         await axios.put(
@@ -81,7 +82,7 @@ export function AddTransactionModal({
   return (
     <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center">
       <div className="bg-white p-5 rounded-lg w-[400px]">
-        <h2 className="text-xl font-bold mb-4">
+        <h2 className="text-xl font-bold mb-4 ">
           {isEditMode ? "Update Transaction" : "Add Transaction"}
         </h2>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
