@@ -20,9 +20,7 @@ export function DashBoard() {
 
   const fetchTransactions = async () => {
     try {
-      const res = await axios.get(
-        "http://localhost:3000/api/transactions"
-      );
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/transactions`)
 
       setTransactions(res.data.data);
     } catch (err) {
@@ -56,7 +54,7 @@ export function DashBoard() {
 
     try {
       await axios.delete(
-        `http://localhost:3000/api/transactions/${id}`
+        `${import.meta.env.VITE_API_URL}/api/transactions/${id}`
       );
 
       fetchTransactions();

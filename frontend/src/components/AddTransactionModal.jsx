@@ -60,8 +60,9 @@ export function AddTransactionModal({
         return;
       }
       if (isEditMode) {
+       
         await axios.put(
-          `http://localhost:3000/api/transactions/${selectedTransaction._id}`,
+          `${import.meta.env.VITE_API_URL}/api/transactions/${selectedTransaction._id}`,
           formData
         );
         toast.success("Transaction updated successfully");
@@ -70,7 +71,11 @@ export function AddTransactionModal({
 
         return;
       }
-      await axios.post("http://localhost:3000/api/transactions", formData);
+      console.log(import.meta.env.VITE_API_URL);
+      await axios.post(
+        `${import.meta.env.VITE_API_URL}/api/transactions`,
+        formData
+      );
       closeModal();
       fetchTransactions();
       toast.success("Transaction added successfully");
@@ -80,16 +85,16 @@ export function AddTransactionModal({
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center">
-      <div className="bg-white p-5 rounded-lg w-[400px]">
-        <h2 className="text-xl font-bold mb-4 ">
+    <div className="fixed top-0 left-0 w-full h-full bg-black/60 flex items-center justify-center">
+      <div className="bg-white p-5 rounded-lg w-[400px]  dark:bg-[#0C1017]">
+        <h2 className="text-xl font-bold mb-4 dark:text-white">
           {isEditMode ? "Update Transaction" : "Add Transaction"}
         </h2>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <input
             type="text"
-            placeholder="Title"
-            className="border p-2 rounded"
+            placeholder="Title "
+            className="border p-2 rounded dark:bg-[#080B12] dark:placeholder:text-gray-400 dark:text-white"
             name="title"
             value={formData.title}
             onChange={handleChange}
@@ -97,7 +102,7 @@ export function AddTransactionModal({
           <input
             type="number"
             placeholder="Amount"
-            className="border p-2 rounded"
+            className="border p-2 rounded dark:bg-[#080B12] dark:placeholder:text-gray-400 dark:text-white"
             min={1}
             max={9999999}
             name="amount"
@@ -106,17 +111,17 @@ export function AddTransactionModal({
           />
 
           <select
-            className="border p-2 rounded"
+            className="border p-2 rounded dark:bg-[#080B12] dark:text-gray-400"
             name="type"
             value={formData.type}
             onChange={handleChange}
           >
-            <option value="">Select Type</option>
+            <option value="" >Select Type</option>
             <option value="income">Income</option>
             <option value="expense">Expense</option>
           </select>
           <select
-            className="border p-2 rounded"
+            className="border p-2 rounded dark:bg-[#080B12] dark:text-gray-400"
             name="category"
             value={formData.category}
             onChange={handleChange}
@@ -153,7 +158,7 @@ export function AddTransactionModal({
 
           <input
             type="date"
-            className="border p-2 rounded"
+            className="border p-2 rounded dark:bg-[#080B12] bg-white dark:text-gray-400 "
             name="date"
             value={formData.date}
             onChange={handleChange}
