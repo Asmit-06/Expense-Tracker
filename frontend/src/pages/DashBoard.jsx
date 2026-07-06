@@ -3,6 +3,7 @@ import { Header } from "../components/Header";
 import { Summary } from "../components/Summary";
 import { TransactionTable } from "../components/TransactionTable";
 import { AddTransactionModal } from "../components/AddTransactionModal";
+import {Charts} from "../components/charts/Charts"
 import { useEffect, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
@@ -325,6 +326,9 @@ export function DashBoard() {
           }
             transactionDiff={transactionDiff}
         />
+
+        <Charts transactions={transactions} />
+        
 
         <TransactionTable
           transactions={recentTransactions}
