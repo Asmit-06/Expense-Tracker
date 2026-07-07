@@ -40,7 +40,7 @@ export function IncomeExpenseBarChart({ transactions }) {
 
   return (
     <div className="w-full h-[350px]">
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} barCategoryGap="40%">
           <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
           <XAxis dataKey="name" stroke="#9CA3AF" />

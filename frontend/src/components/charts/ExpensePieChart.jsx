@@ -41,7 +41,7 @@ export function ExpensePieChart({ transactions }) {
   }
   return (
     <div className="w-full h-[350px]">
-      <ResponsiveContainer width="100%" height={300}>
+      <ResponsiveContainer width="100%" height="100%">
         <PieChart>
           <h1 className="dark:text-white">Expense Pie Chart</h1>
           <Pie
