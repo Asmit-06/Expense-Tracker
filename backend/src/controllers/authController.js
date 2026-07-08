@@ -19,6 +19,15 @@ export const register = async (req, res) => {
 
     const normalizedEmail = email.toLowerCase().trim();
     const userExists = await User.findOne({ email: normalizedEmail });
+    const usernameExists = await User.findOne({
+      username,
+    });
+
+    if (usernameExists) {
+      return res.status(400).json({
+        message: "Username already exists",
+      });
+    }
     if (userExists) {
       return res.status(400).json({ message: "User already exists" });
     }
@@ -46,24 +55,24 @@ export const register = async (req, res) => {
 };
 
 export const login = async (req, res) => {
-  try{
+  try {
     const { email, password } = req.body;
     if (!email || !password) {
       return res.status(400).json({
         message: "Please provide email and password",
       });
     }
-    const user =await User.findOne({email:email.toLowerCase().trim()}).select("+passwordHash");
-    if(!user){
+    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    if (!user) {
       return res
-      .status(401)
-      .json({ message: "Invalid credentials,User Doesnt exist" });
+        .status(401)
+        .json({ message: "Invalid credentials,User Doesnt exist" });
     }
-    const isMatch = await bcrypt.compare(password,user.passwordHash)
-    if(!isMatch){
+    const isMatch = await bcrypt.compare(password, user.passwordHash);
+    if (!isMatch) {
       return res
-      .status(401)
-      .json({ message: "Invalid credentials,Password is incorrect" });
+        .status(401)
+        .json({ message: "Invalid credentials,Password is incorrect" });
     }
 
     const accessToken = generateAccessToken(user._id);
@@ -75,25 +84,22 @@ export const login = async (req, res) => {
       accessToken,
       refreshToken,
     });
-  }catch(err){
+  } catch (err) {
     console.error(err);
     return res.status(500).json({ message: "Server error" });
   }
-  
 };
 
-
-export const getMe = async (req,res)=>{
-  try{
+export const getMe = async (req, res) => {
+  try {
     const userId = req.userId;
-    const user = await User.findById(userId).select('-passwordHash');
-    if(!user){
-      return res.status(404).json({message:"User not found"});
+    const user = await User.findById(userId).select("-passwordHash");
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
     }
     res.status(200).json(user);
-  }catch(err){
+  } catch (err) {
     console.error(err);
-    return res.status(500).json({message:"Server error"});
+    return res.status(500).json({ message: "Server error" });
   }
- 
-}
+};

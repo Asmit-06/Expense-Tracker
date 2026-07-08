@@ -4,11 +4,19 @@ import { TransactionPage } from "./pages/TransactionPage";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { useState } from "react";
 import { SunIcon, MoonIcon } from "lucide-react";
+import {Login} from "./pages/Login"
+import { Register } from "./pages/Register";
+
 function App() {
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("theme") === "dark"
   );
   const location = useLocation();
+  const hideThemeButton = [
+    "/login",
+    "/register",
+  ].includes(location.pathname);
+ 
   const toggleTheme = () => {
     const newTheme = !darkMode;
     setDarkMode(newTheme);
@@ -16,10 +24,10 @@ function App() {
   };
   return (
     <div className={darkMode ? "dark" : ""}>
-      {location.pathname !== "/transactions" && (
+      {location.pathname !== "/transactions" && !hideThemeButton && (
         <button
           onClick={() => toggleTheme()}
-          className="fixed top-8.5 right-70 z-50 bg-blue-500 text-white px-4 py-4 rounded-[80px] cursor-pointer"
+          className="absolute top-8.5 right-100 z-50 bg-blue-500 text-white px-4 py-4 rounded-[80px] cursor-pointer"
           showViewAll={true}
         >
           {darkMode ? <SunIcon /> : <MoonIcon />}
@@ -30,6 +38,8 @@ function App() {
       <Routes>
         <Route path="/" element={<DashBoard />} />
         <Route path="/transactions" element={<TransactionPage />} />
+        <Route path="/login" element={<Login/>} />
+        <Route path="/register" element={<Register/>} />
       </Routes>
     </div>
   );
