@@ -3,7 +3,7 @@ import { IncomeExpenseBarChart } from "./IncomeExpenseBarChart"
 import { BalanceLineChart } from "./BalanceLineChart"
 export function Charts({transactions}) {
   return (
-    <div className="flex w-full h-[350px] justify-between">
+    <div className="grid grid-cols-1 lg:grid-cols-3 ">
      <ExpensePieChart transactions={transactions} />
       <IncomeExpenseBarChart transactions={transactions} />
       <BalanceLineChart transactions={transactions} />

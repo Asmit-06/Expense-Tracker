@@ -11,7 +11,7 @@ export function TransactionTable({
 }) {
   const location = useLocation();
   return (
-    <div className="mt-8 shadow-sm border border-gray-200 rounded-[7px] overflow-hidden dark:border-gray-600">
+    <div className="mt-14 shadow-sm border border-gray-200 rounded-[7px] overflow-hidden dark:border-gray-600">
       {location.pathname !== "/transactions" && (
           <div className="bg-white px-4 py-4 dark:bg-[#0D1016]">
           {showViewAll && <h1 className="font-bold text-2xl dark:text-white">Recent Transactions</h1>}

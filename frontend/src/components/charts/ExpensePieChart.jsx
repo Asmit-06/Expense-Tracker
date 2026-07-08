@@ -40,10 +40,13 @@ export function ExpensePieChart({ transactions }) {
     );
   }
   return (
-    <div className="w-full h-[350px]">
+    <div className="w-full h-[350px] rounded-xl p-4">
+        <h2 className="text-lg font-semibold dark:text-white mb-4">
+        Expense Distribution
+      </h2>
       <ResponsiveContainer width="100%" height="100%">
         <PieChart>
-          <h1 className="dark:text-white">Expense Pie Chart</h1>
+          
           <Pie
             data={chartData}
             dataKey="amount"

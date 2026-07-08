@@ -6,7 +6,7 @@ import {
   Tooltip,
   YAxis,
   XAxis,
-  CartesianGrid
+  CartesianGrid,
 } from "recharts";
 
 export function IncomeExpenseBarChart({ transactions }) {
@@ -30,16 +30,22 @@ export function IncomeExpenseBarChart({ transactions }) {
     },
   ];
 
-  if(chartData.income === 0 && chartData.expense === 0) {
+  if (chartData.income === 0 && chartData.expense === 0) {
     return (
       <div className="w-full h-[350px] flex items-center justify-center">
-        <p className="dark:text-white">No Income Vs Expense <br /> data available</p>
+        <p className="dark:text-white">
+          No Income Vs Expense <br /> data available
+        </p>
       </div>
     );
   }
 
   return (
-    <div className="w-full h-[350px]">
+    <div className="w-full h-[350px] rounded-xl p-4 ">
+      <h2 className="text-lg font-semibold dark:text-white mb-4">
+        Income Vs Expense
+      </h2>
+
       <ResponsiveContainer width="100%" height="100%">
         <BarChart data={data} barCategoryGap="40%">
           <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
