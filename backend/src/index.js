@@ -3,6 +3,7 @@ import cors from "cors";
 import ConnectDB from "./config/db.js"
 import dotenv from "dotenv";
 import transactionRoutes from "./routes/transactionRoutes.js";
+import authRoutes from "./routes/authRoutes.js"
 dotenv.config();
 const app = express();
 app.use(cors({
@@ -11,7 +12,7 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use("/api/transactions", transactionRoutes);
-
+app.use("/api/auth",authRoutes)
 
 
 const PORT = process.env.PORT || 3000;
