@@ -10,7 +10,24 @@ import toast from "react-hot-toast";
 
 export function DashBoard() {
   const [selectedTransaction, setSelectedTransaction] = useState(null);
+  const[user,setUser] = useState(null)
+  const fetchUser = async()=>{
+    try{
+      const res = await axios.get(
+        `${import.meta.env.VITE_API_URL}/api/auth/me`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+  
+      setUser(res.data);
+    }catch(err){
+      console.error(err)
 
+    }
+  }
   const handleEdit = (transaction) => {
     setSelectedTransaction(transaction);
     setisOpen(true);
@@ -304,6 +321,7 @@ export function DashBoard() {
   const transactionDiff = currentMonthTotalTransactions - previousMonthTotalTransactions;
   useEffect(() => {
     fetchTransactions();
+    fetchUser()
   }, []);
 
   return (
@@ -316,6 +334,7 @@ export function DashBoard() {
       <main className="flex-1 bg-gray-100 py-8 px-10 dark:bg-[#06070c] ">
         <Header
           handleAddTransaction={handleAddTransaction}
+          user={user}
         />
 
         <Summary
