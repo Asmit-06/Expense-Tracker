@@ -2,7 +2,7 @@ import Transaction from '../models/Transaction.js';
 
 const getAllTransactions = async(req,res)=>{
   try{
-    const transaction = await Transaction.find().sort({createdAt:-1});
+    const transaction = await Transaction.find({user:req.userId}).sort({createdAt:-1});
     res.status(200).json({message:"Transactions fetched successfully", data:transaction});
   }catch(err){
     res.status(500).json({message:"Error fetching transactions", error:err.message});
@@ -11,7 +11,7 @@ const getAllTransactions = async(req,res)=>{
 
 const addTransaction = async(req,res)=>{
   try{
-    const newTransaction = await Transaction.create(req.body);
+    const newTransaction = await Transaction.create({...req.body,user:req.userId});
     res.status(201).json({message:"Transaction added successfully", data:newTransaction});
   }catch(err){
     res.status(400).json({message:"Error adding transaction", error:err.message});
@@ -20,7 +20,9 @@ const addTransaction = async(req,res)=>{
 
 const deleteTransaction = async(req,res)=>{
   try{
-    const deletedtransaction = await Transaction.findByIdAndDelete(req.params.id);
+    const deletedtransaction = await Transaction.findOneAndDelete({
+      _id:req.params.id,user:req.userId
+    });
     if(!deletedtransaction){
       return res.status(404).json({message:"Transaction not found"});
     }
@@ -35,7 +37,7 @@ const updateTransaction = async(req,res)=>{
     const {id} = req.params;
     const {amount,title,type,category,date} = req.body;
   
-    const updatedNote = await Transaction.findByIdAndUpdate(id,{amount,title,type,category,date},{new : true});
+    const updatedNote = await Transaction.findByIdAndUpdate({_id:id,user:req.userId},{amount,title,type,category,date},{new : true});
     if(!updatedNote){
       return res.status(404).json({message:"Transaction not found"});
     }
@@ -48,7 +50,7 @@ const updateTransaction = async(req,res)=>{
 
 const getTransactionById = async(req,res)=>{
   try{
-    const transaction = await Transaction.findById(req.params.id);
+    const transaction = await Transaction.findById({_id:req.params.id,user:req.userId});
     if(!transaction){
       return res.status(404).json({message:"Transaction not found"});
     }

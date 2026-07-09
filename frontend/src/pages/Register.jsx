@@ -33,6 +33,10 @@ export function Register() {
           username,
           email:email.trim(),
           password,
+        },{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
       );
 

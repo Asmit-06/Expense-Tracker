@@ -63,7 +63,11 @@ export function AddTransactionModal({
        
         await axios.put(
           `${import.meta.env.VITE_API_URL}/api/transactions/${selectedTransaction._id}`,
-          formData
+          formData,{
+            headers:{
+              Authorization:`Bearer ${localStorage.getItem("token")}`
+            }
+          }
         );
         toast.success("Transaction updated successfully");
         closeModal();
@@ -74,7 +78,11 @@ export function AddTransactionModal({
       console.log(import.meta.env.VITE_API_URL);
       await axios.post(
         `${import.meta.env.VITE_API_URL}/api/transactions`,
-        formData
+        formData,{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
       closeModal();
       fetchTransactions();

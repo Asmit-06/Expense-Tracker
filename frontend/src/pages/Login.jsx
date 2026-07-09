@@ -17,6 +17,10 @@ export function Login() {
         {
           email,
           password,
+        },{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         }
       );
       localStorage.setItem("token", res.data.accessToken);
@@ -79,11 +83,8 @@ export function Login() {
             </div>
           </div>
 
-          <div className="flex justify-between items-center text-sm">
-            <label className="flex items-center gap-2 text-gray-400">
-              <input type="checkbox" />
-              Remember me
-            </label>
+          <div className="flex justify-end text-sm">
+            
 
             <button type="button" className="text-blue-500 hover:text-blue-400">
               Forgot Password?

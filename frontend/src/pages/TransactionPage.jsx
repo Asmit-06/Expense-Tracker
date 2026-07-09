@@ -18,7 +18,11 @@ export function TransactionPage() {
       return;
 
     try {
-      await axios.delete(`http://localhost:3000/api/transactions/${id}`);
+      await axios.delete(`http://localhost:3000/api/transactions/${id}`,{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       fetchTransactions();
       toast.success("Transaction deleted successfully");
     } catch (err) {
@@ -28,7 +32,11 @@ export function TransactionPage() {
 
   const fetchTransactions = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/transactions");
+      const res = await axios.get("http://localhost:3000/api/transactions",{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
       setTransactions(res.data.data);
     } catch (err) {
       console.error("Error fetching transactions", err);

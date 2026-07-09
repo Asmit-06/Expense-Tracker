@@ -21,7 +21,11 @@ export function DashBoard() {
 
   const fetchTransactions = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/transactions`)
+      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/transactions`,{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      })
 
       setTransactions(res.data.data);
     } catch (err) {
@@ -55,7 +59,11 @@ export function DashBoard() {
 
     try {
       await axios.delete(
-        `${import.meta.env.VITE_API_URL}/api/transactions/${id}`
+        `${import.meta.env.VITE_API_URL}/api/transactions/${id}`,{
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
       );
 
       fetchTransactions();
