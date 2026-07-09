@@ -6,6 +6,7 @@ import toast from "react-hot-toast";
 export function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const handleLogin = async (e) => {
@@ -17,10 +18,6 @@ export function Login() {
         {
           email,
           password,
-        },{
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
         }
       );
       localStorage.setItem("token", res.data.accessToken);
@@ -72,14 +69,14 @@ export function Login() {
               <Lock size={18} className="text-gray-400" />
 
               <input
-                type="password"
+                type={showPassword?"text":"password"}
                 placeholder="Enter password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full px-3 py-3 bg-transparent outline-none text-white"
               />
 
-              <Eye size={18} className="text-gray-400 cursor-pointer" />
+              <Eye size={18} className="text-gray-400 cursor-pointer" onClick={()=>setShowPassword(!showPassword)} />
             </div>
           </div>
 

@@ -6,6 +6,8 @@ import { useState } from "react";
 import { SunIcon, MoonIcon } from "lucide-react";
 import {Login} from "./pages/Login"
 import { Register } from "./pages/Register";
+import { ProtectedRoute } from "./components/ProtectedRoute";
+import { PublicRoute } from "./components/PublicRoute";
 
 function App() {
   const [darkMode, setDarkMode] = useState(
@@ -36,10 +38,10 @@ function App() {
 
       <Toaster />
       <Routes>
-        <Route path="/" element={<DashBoard />} />
-        <Route path="/transactions" element={<TransactionPage />} />
-        <Route path="/login" element={<Login/>} />
-        <Route path="/register" element={<Register/>} />
+        <Route path="/" element={<ProtectedRoute><DashBoard/></ProtectedRoute>} />
+        <Route path="/transactions" element={<ProtectedRoute><TransactionPage/></ProtectedRoute>} />
+        <Route path="/login" element={<PublicRoute><Login/></PublicRoute>} />
+        <Route path="/register" element={<PublicRoute><Register/></PublicRoute>} />
       </Routes>
     </div>
   );
