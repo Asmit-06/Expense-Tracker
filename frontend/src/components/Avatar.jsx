@@ -7,6 +7,7 @@ export function AvatarDropdown({ user}) {
   const navigate = useNavigate()
   const handleLogout = ()=>{
     localStorage.removeItem("token")
+    localStorage.removeItem("refreshToken")
     toast.success("Logged out successfully");
     navigate("/login");
   }

@@ -1,5 +1,6 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken"
 import {
   generateAccessToken,
   generateRefreshToken,
@@ -103,3 +104,24 @@ export const getMe = async (req, res) => {
     return res.status(500).json({ message: "Server error" });
   }
 };
+
+export const refreshAccessToken = async(req,res)=>{
+  try{
+    const refresh  = req.body.refreshToken
+
+    if(!refresh)return res.status(401).json({message:"Invalid Refresh Token"})
+    const decoded = jwt.verify(refresh,process.env.JWT_REFRESH_SECRET)
+  
+    const newAccessToken = generateAccessToken(decoded.userId)
+    res.status(200).json({
+      newAccessToken
+    })
+  }catch(err){
+    console.error(err);
+    return res.status(401).json({
+      message: "Invalid or expired refresh token",
+    });
+  }
+ 
+  
+}

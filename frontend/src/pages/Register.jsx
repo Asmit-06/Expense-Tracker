@@ -41,6 +41,7 @@ export function Register() {
       );
 
       localStorage.setItem("token", res.data.accessToken);
+      localStorage.setItem("refreshToken", res.data.refreshToken);
       toast.success("Account created successfully!");
 
       navigate("/");

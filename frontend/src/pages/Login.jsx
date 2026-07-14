@@ -21,6 +21,7 @@ export function Login() {
         }
       );
       localStorage.setItem("token", res.data.accessToken);
+      localStorage.setItem("refreshToken",res.data.refreshToken)
       toast.success("Login successful!");
       navigate("/");
     } catch (err) {
