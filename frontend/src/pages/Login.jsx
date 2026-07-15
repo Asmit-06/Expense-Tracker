@@ -84,8 +84,9 @@ export function Login() {
           <div className="flex justify-end text-sm">
             
 
-            <button type="button" className="text-blue-500 hover:text-blue-400">
-              Forgot Password?
+            <button type="button" className="text-blue-500 hover:text-blue-400" >
+              <Link to="/forgotPassword" >Forgot Password?</Link>
+         
             </button>
           </div>
 

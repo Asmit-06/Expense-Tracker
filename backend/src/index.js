@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 import transactionRoutes from "./routes/transactionRoutes.js";
 import authRoutes from "./routes/authRoutes.js"
 dotenv.config();
+
 const app = express();
 app.use(cors({
   origin: process.env.CLIENT_URL,

@@ -8,7 +8,7 @@ import {Login} from "./pages/Login"
 import { Register } from "./pages/Register";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { PublicRoute } from "./components/PublicRoute";
-
+import { ForgotPassword } from "./pages/ForgotPassword";
 function App() {
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("theme") === "dark"
@@ -17,6 +17,7 @@ function App() {
   const hideThemeButton = [
     "/login",
     "/register",
+    "/forgotPassword"
   ].includes(location.pathname);
  
   const toggleTheme = () => {
@@ -42,6 +43,7 @@ function App() {
         <Route path="/transactions" element={<ProtectedRoute><TransactionPage/></ProtectedRoute>} />
         <Route path="/login" element={<PublicRoute><Login/></PublicRoute>} />
         <Route path="/register" element={<PublicRoute><Register/></PublicRoute>} />
+        <Route path="/forgotPassword" element={<PublicRoute><ForgotPassword/></PublicRoute>} />
       </Routes>
     </div>
   );
