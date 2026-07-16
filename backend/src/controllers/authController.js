@@ -173,3 +173,36 @@ export const forgotPassword = async (req, res) => {
     });
   }
 };
+
+export const resetPassword=async(req,res)=>{
+  try{
+    const {token} = req.params
+    const{password} = req.body
+    if (!password || password.length < 6) {
+      return res.status(400).json({
+        message: "Password must be at least 6 characters",
+      });
+    }
+    if(!token)return res.status(401).json({message:"Invalid reset token"})
+    const decoded = jwt.verify(token,process.env.JWT_RESET_SECRET)
+    const user = await User.findById(decoded.userId)
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+    const passHash = await bcrypt.hash(password,10);
+    user.passwordHash = passHash
+    await user.save()
+    res.status(200).json({
+      message: "Password Changed Successfully.",
+    });
+  }catch(err){
+    console.error(err)
+    return res.status(401).json({
+      message:"Invalid"
+    })
+  }
+
+
+}

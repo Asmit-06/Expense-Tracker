@@ -9,6 +9,7 @@ import { Register } from "./pages/Register";
 import { ProtectedRoute } from "./components/ProtectedRoute";
 import { PublicRoute } from "./components/PublicRoute";
 import { ForgotPassword } from "./pages/ForgotPassword";
+import { ResetPassword } from "./pages/ResetPassword";
 function App() {
   const [darkMode, setDarkMode] = useState(
     localStorage.getItem("theme") === "dark"
@@ -17,8 +18,8 @@ function App() {
   const hideThemeButton = [
     "/login",
     "/register",
-    "/forgotPassword"
-  ].includes(location.pathname);
+    "/forgotPassword",
+  ].includes(location.pathname) || location.pathname.startsWith("/reset-password/");;
  
   const toggleTheme = () => {
     const newTheme = !darkMode;
@@ -44,6 +45,7 @@ function App() {
         <Route path="/login" element={<PublicRoute><Login/></PublicRoute>} />
         <Route path="/register" element={<PublicRoute><Register/></PublicRoute>} />
         <Route path="/forgotPassword" element={<PublicRoute><ForgotPassword/></PublicRoute>} />
+        <Route path="/reset-password/:token" element={<PublicRoute><ResetPassword/></PublicRoute>}/>
       </Routes>
     </div>
   );
