@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "axios";
+import api from "../api/axios.js"
 import toast from "react-hot-toast";
 export function ForgotPassword() {
   const [email, setEmail] = useState("");
@@ -13,13 +13,10 @@ export function ForgotPassword() {
       return;
     }
     try {
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/forgot-password`,
-        {
-          email,
-        }
-      );
-      toast.success("Reset link sent to your email.");
+      await api.post("/api/auth/forgot-password",{
+        email
+      })
+      toast.success("Reset link sent to your email.Check Spam Folder");
       setEmail("");
     } catch (err) {
       console.log(err);

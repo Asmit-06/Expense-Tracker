@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
+
+import api from "../api/axios.js"
 import toast from "react-hot-toast";
 export function AddTransactionModal({
   closeModal,
@@ -54,20 +55,18 @@ export function AddTransactionModal({
       ) {
         toast.error("Please fill all the fields");
         return;
+
       }
       if (formData.amount > 9999999) {
         toast.error("Amount should be less than 9999999");
         return;
       }
+
       if (isEditMode) {
        
-        await axios.put(
-          `${import.meta.env.VITE_API_URL}/api/transactions/${selectedTransaction._id}`,
-          formData,{
-            headers:{
-              Authorization:`Bearer ${localStorage.getItem("token")}`
-            }
-          }
+        await api.put(
+          `/api/transactions/${selectedTransaction._id}`,
+          formData
         );
         toast.success("Transaction updated successfully");
         closeModal();
@@ -76,13 +75,9 @@ export function AddTransactionModal({
         return;
       }
       console.log(import.meta.env.VITE_API_URL);
-      await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/transactions`,
-        formData,{
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
+      await api.post(
+        `/api/transactions/`,
+        formData
       );
       closeModal();
       fetchTransactions();

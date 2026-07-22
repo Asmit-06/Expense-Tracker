@@ -1,6 +1,5 @@
 import { IndianRupeeIcon,Edit,Trash } from "lucide-react";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
 export function TransactionRow({ transaction,deleteTransaction,handleEdit }) {
   const location = useLocation();
   return (

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useParams,useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios.js"
 import toast from "react-hot-toast";
 export function ResetPassword() {
   const [password1, setPassword1] = useState("");
@@ -31,11 +31,10 @@ export function ResetPassword() {
       return 
     }
     try{
-      await axios.post( `${import.meta.env.VITE_API_URL}/api/auth/reset-password/${token}`,
-        {
-          password:password1,
-        })
-        toast.success("Password reset successfully!");
+      await api.post(`/api/auth/reset-password/${token}`,{
+        password:password1
+      })
+      toast.success("Password reset successfully!");
       setPassword1("")
       setPassword2("")
       setTimeout(()=>{

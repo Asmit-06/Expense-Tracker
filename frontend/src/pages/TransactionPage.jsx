@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { TransactionTable } from "../components/TransactionTable";
 import { AddTransactionModal } from "../components/AddTransactionModal";
 import { ArrowLeftIcon, Search } from "lucide-react";
-import axios from "axios";
+import api from "../api/axios.js"
 import toast from "react-hot-toast";
 export function TransactionPage() {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,11 +18,7 @@ export function TransactionPage() {
       return;
 
     try {
-      await axios.delete(`http://localhost:3000/api/transactions/${id}`,{
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      await api.delete(`http://localhost:3000/api/transactions/${id}`)
       fetchTransactions();
       toast.success("Transaction deleted successfully");
     } catch (err) {
@@ -32,11 +28,7 @@ export function TransactionPage() {
 
   const fetchTransactions = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/transactions",{
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
+      const res=  await api.get("http://localhost:3000/api/transactions")
       setTransactions(res.data.data);
     } catch (err) {
       console.error("Error fetching transactions", err);

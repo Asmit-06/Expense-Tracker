@@ -1,7 +1,7 @@
 import { Mail, Lock, Eye } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios.js"
 import toast from "react-hot-toast";
 export function Login() {
   const navigate = useNavigate();
@@ -13,13 +13,10 @@ export function Login() {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/login`,
-        {
-          email,
-          password,
-        }
-      );
+      const res =await api.post("/api/auth/login",{
+        email,
+        password
+      })
       localStorage.setItem("token", res.data.accessToken);
       localStorage.setItem("refreshToken",res.data.refreshToken)
       toast.success("Login successful!");

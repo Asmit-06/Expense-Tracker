@@ -5,7 +5,7 @@ import { TransactionTable } from "../components/TransactionTable";
 import { AddTransactionModal } from "../components/AddTransactionModal";
 import {Charts} from "../components/charts/Charts"
 import { useEffect, useState } from "react";
-import axios from "axios";
+import api from "../api/axios.js"
 import toast from "react-hot-toast";
 
 export function DashBoard() {
@@ -13,14 +13,7 @@ export function DashBoard() {
   const[user,setUser] = useState(null)
   const fetchUser = async()=>{
     try{
-      const res = await axios.get(
-        `${import.meta.env.VITE_API_URL}/api/auth/me`,
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const res = await api.get("/api/auth/me");
   
       setUser(res.data);
     }catch(err){
@@ -38,11 +31,7 @@ export function DashBoard() {
 
   const fetchTransactions = async () => {
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/api/transactions`,{
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      })
+      const res =await api.get("/api/transactions");
 
       setTransactions(res.data.data);
     } catch (err) {
@@ -75,13 +64,7 @@ export function DashBoard() {
       return;
 
     try {
-      await axios.delete(
-        `${import.meta.env.VITE_API_URL}/api/transactions/${id}`,{
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      await api.delete(`/api/transactions/${id}`);
 
       fetchTransactions();
 

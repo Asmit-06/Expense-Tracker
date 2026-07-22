@@ -1,7 +1,7 @@
 import { User, Mail, Lock, Eye } from "lucide-react";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import axios from "axios";
+import api from "../api/axios.js"
 import toast from "react-hot-toast";
 export function Register() {
   const navigate = useNavigate();
@@ -27,18 +27,12 @@ export function Register() {
       return;
     }
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/register`,
-        {
-          username,
-          email:email.trim(),
-          password,
-        },{
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
+      const res = await api.post("/api/auth/register",{
+        username,
+        email:email.trim(),
+        password
+      })
+    
 
       localStorage.setItem("token", res.data.accessToken);
       localStorage.setItem("refreshToken", res.data.refreshToken);
