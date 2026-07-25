@@ -1,7 +1,7 @@
 import { Plus } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AvatarDropdown } from "./Avatar";
-export function Header({ handleAddTransaction,user }) {
+export function Header({ handleAddTransaction,user,setUser }) {
   return (
     <div className="flex items-center justify-between">
       <h1 className="text-3xl font-bold dark:text-white">
@@ -16,7 +16,7 @@ export function Header({ handleAddTransaction,user }) {
           className="border border-blue-600 text-blue-600 dark:text-blue-400 dark:border-blue-400 px-6 py-4 rounded-[10px] hover:bg-blue-600 hover:text-white transition"
         >
           Login
-        </Link>):(<AvatarDropdown user={user}/>)}
+        </Link>):(<AvatarDropdown user={user} setUser={setUser}/>)}
        
 
         <button

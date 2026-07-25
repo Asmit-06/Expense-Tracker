@@ -318,6 +318,7 @@ export function DashBoard() {
         <Header
           handleAddTransaction={handleAddTransaction}
           user={user}
+          setUser={setUser}
         />
 
         <Summary
