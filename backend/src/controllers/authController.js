@@ -206,3 +206,37 @@ export const resetPassword=async(req,res)=>{
 
 
 }
+
+
+export const updateAvatar = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.userId);
+
+    if (!user) {
+      return res.status(404).json({
+        message: "User not found",
+      });
+    }
+    if (!req.file) {
+      return res.status(400).json({
+        message: "Please upload an image",
+      });
+    }
+
+    user.avatar = req.file.path;
+
+    await user.save();
+
+    res.status(200).json({
+      message: "Avatar updated successfully",
+      avatar: user.avatar,
+    });
+
+  } catch (err) {
+    console.error(err);
+
+    return res.status(500).json({
+      message: "Server Error",
+    });
+  }
+};

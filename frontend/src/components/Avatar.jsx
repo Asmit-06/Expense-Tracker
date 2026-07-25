@@ -33,13 +33,13 @@ export function AvatarDropdown({ user}) {
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute right-0 mt-3 w-64 rounded-xl border border-gray-700 bg-[#10151F] shadow-2xl overflow-hidden z-50">
+        <div className="absolute right-0 mt-3 w-70 rounded-xl border border-gray-700 bg-[#10151F] shadow-2xl overflow-hidden z-50">
 
           {/* User Info */}
           <div className="px-5 py-4 border-b border-gray-700">
             <div className="flex items-center gap-3">
 
-              <div className="w-12 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl">
+              <div className="p-4 h-12 rounded-full bg-blue-600 flex items-center justify-center text-white font-bold text-xl">
                 {user?.username?.charAt(0).toUpperCase()}
               </div>
 
