@@ -2,11 +2,9 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api/axios.js";
 import toast from "react-hot-toast";
-import { Mail, Wallet, ArrowLeft, Sun, Moon, Send } from "lucide-react";
-import { useTheme } from "../context/ThemeContext";
+import { Mail, Wallet, ArrowLeft, ArrowRight } from "lucide-react";
 
 export function ForgotPassword() {
-  const { darkMode, toggleTheme } = useTheme();
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
@@ -23,7 +21,7 @@ export function ForgotPassword() {
         email: email.trim(),
       });
       setSent(true);
-      toast.success("Reset link sent! Please check your inbox and spam folder.");
+      toast.success("Recovery link dispatched");
     } catch (err) {
       toast.error(err.response?.data?.message || "Failed to send reset email");
     } finally {
@@ -32,67 +30,48 @@ export function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen relative flex items-center justify-center p-4 bg-slate-50 dark:bg-[#0b0f19] transition-colors duration-200 overflow-hidden">
-      {/* Background ambient lighting */}
-      <div className="absolute top-1/4 -left-20 w-96 h-96 bg-indigo-500/10 dark:bg-indigo-600/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-1/4 -right-20 w-96 h-96 bg-violet-500/10 dark:bg-violet-600/10 rounded-full blur-3xl pointer-events-none" />
-
-      {/* Top right theme toggle */}
-      <div className="absolute top-6 right-6 z-10">
-        <button
-          onClick={toggleTheme}
-          aria-label="Toggle theme"
-          className="p-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition shadow-xs cursor-pointer"
-        >
-          {darkMode ? (
-            <Sun size={18} className="text-amber-400" />
-          ) : (
-            <Moon size={18} className="text-slate-700" />
-          )}
-        </button>
-      </div>
-
-      <div className="relative z-10 w-full max-w-md rounded-3xl bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800 p-8 sm:p-9 shadow-xl shadow-slate-200/40 dark:shadow-none transition-all">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-[#010102] text-[#f7f8f8]">
+      <div className="w-full max-w-sm rounded-[12px] bg-[#0f1011] border border-[#23252a] p-7 sm:p-8">
         {/* Brand Header */}
         <div className="flex flex-col items-center text-center">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 to-violet-600 flex items-center justify-center shadow-md shadow-indigo-500/25 mb-3.5">
-            <Wallet className="w-6 h-6 text-white" strokeWidth={2.4} />
+          <div className="w-8 h-8 rounded-[6px] bg-[#5e6ad2] flex items-center justify-center text-white mb-3">
+            <Wallet size={17} strokeWidth={2.4} />
           </div>
-          <h1 className="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">
-            Reset Password
+          <h1 className="text-[20px] font-semibold tracking-[-0.6px] text-[#f7f8f8]">
+            Reset password
           </h1>
-          <p className="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 mt-1 max-w-xs">
-            Enter your email and we'll send a secure password reset link
+          <p className="text-[13px] text-[#8a8f98] mt-1">
+            Enter your email to receive recovery instructions
           </p>
         </div>
 
         {sent ? (
-          <div className="mt-7 text-center space-y-4">
-            <div className="p-4 rounded-2xl bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 text-emerald-800 dark:text-emerald-300 text-xs sm:text-sm">
-              We've dispatched a recovery link to <strong>{email}</strong>. Check your inbox or spam folder.
+          <div className="mt-6 text-center space-y-4">
+            <div className="p-3 rounded-[8px] bg-[#141516] border border-[#23252a] text-[#27a644] text-[13px]">
+              A password reset link has been sent to <strong>{email}</strong>.
             </div>
             <Link
               to="/login"
-              className="inline-flex items-center gap-1.5 text-xs font-bold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400"
+              className="inline-flex items-center gap-1.5 text-[13px] font-medium text-[#5e6ad2] hover:text-[#828fff]"
             >
-              <ArrowLeft size={14} /> Back to Sign In
+              <ArrowLeft size={14} /> Back to sign in
             </Link>
           </div>
         ) : (
-          <form className="mt-7 space-y-4" onSubmit={handleSubmit} autoComplete="off">
+          <form className="mt-6 space-y-3.5" onSubmit={handleSubmit} autoComplete="off">
             <div>
-              <label className="text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1.5 block">
+              <label className="text-[11px] font-medium uppercase tracking-[0.4px] text-[#8a8f98] mb-1 block">
                 Account Email
               </label>
               <div className="relative flex items-center">
-                <Mail size={17} className="absolute left-3.5 text-slate-400 pointer-events-none" />
+                <Mail size={15} className="absolute left-3 text-[#62666d] pointer-events-none" />
                 <input
                   type="email"
                   required
                   placeholder="name@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full pl-10 pr-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50/50 dark:bg-slate-900/80 text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition"
+                  className="w-full pl-8 pr-3 py-2 rounded-[8px] border border-[#23252a] focus:border-[#5e69d1] focus:ring-1 focus:ring-[#5e69d1] bg-[#141516] text-[13px] text-[#f7f8f8] placeholder-[#62666d] outline-none transition"
                 />
               </div>
             </div>
@@ -101,19 +80,19 @@ export function ForgotPassword() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold text-sm shadow-md shadow-indigo-500/25 active:scale-[0.98] transition cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
+                className="w-full py-2 px-3.5 rounded-[8px] bg-[#5e6ad2] hover:bg-[#828fff] active:bg-[#5e69d1] text-white text-[14px] font-medium transition cursor-pointer disabled:opacity-60 flex items-center justify-center gap-2"
               >
-                <span>{loading ? "Sending Link..." : "Send Reset Link"}</span>
-                {!loading && <Send size={15} strokeWidth={2.2} />}
+                <span>{loading ? "Sending..." : "Send link"}</span>
+                {!loading && <ArrowRight size={14} strokeWidth={2.4} />}
               </button>
             </div>
 
             <div className="text-center pt-2">
               <Link
                 to="/login"
-                className="inline-flex items-center gap-1.5 text-xs font-semibold text-slate-500 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-indigo-400 transition"
+                className="inline-flex items-center gap-1 text-[12px] text-[#8a8f98] hover:text-[#f7f8f8] transition"
               >
-                <ArrowLeft size={14} /> Back to Sign In
+                <ArrowLeft size={13} /> Back to sign in
               </Link>
             </div>
           </form>

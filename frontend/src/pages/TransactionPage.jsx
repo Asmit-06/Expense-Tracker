@@ -3,14 +3,7 @@ import { TransactionTable } from "../components/TransactionTable";
 import { AddTransactionModal } from "../components/AddTransactionModal";
 import { Sidebar } from "../components/Sidebar";
 import { Header } from "../components/Header";
-import {
-  Search,
-  X,
-  Filter,
-  IndianRupee,
-  ArrowDownLeft,
-  ArrowUpRight,
-} from "lucide-react";
+import { Search, X, Filter } from "lucide-react";
 import api from "../api/axios.js";
 import toast from "react-hot-toast";
 
@@ -23,7 +16,7 @@ export function TransactionPage() {
 
   // Filters
   const [search, setSearch] = useState("");
-  const [typeFilter, setTypeFilter] = useState("all"); // all | income | expense
+  const [typeFilter, setTypeFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("all");
 
   const fetchUser = async () => {
@@ -66,7 +59,7 @@ export function TransactionPage() {
     try {
       await api.delete(`/api/transactions/${id}`);
       fetchTransactions();
-      toast.success("Transaction deleted successfully");
+      toast.success("Transaction deleted");
     } catch (err) {
       console.error("Error deleting transaction", err);
     }
@@ -94,13 +87,12 @@ export function TransactionPage() {
     return matchesSearch && matchesType && matchesCategory;
   });
 
-  // Extract all unique categories
   const allCategories = Array.from(
     new Set(transactions.map((t) => t.category).filter(Boolean))
   );
 
   return (
-    <div className="min-h-screen flex bg-slate-50 dark:bg-[#0b0f19] transition-colors duration-200">
+    <div className="min-h-screen flex bg-[#010102] text-[#f7f8f8]">
       <Sidebar
         handleAddTransaction={handleAddTransaction}
         balance={balance}
@@ -111,82 +103,81 @@ export function TransactionPage() {
       <main className="flex-1 min-w-0 py-6 px-4 sm:px-8 lg:px-10 overflow-y-auto max-w-7xl mx-auto">
         <Header
           title="Transactions"
-          subtitle="Explore, filter, and manage your full transaction history"
+          subtitle="Full activity register and filterable records"
           handleAddTransaction={handleAddTransaction}
           user={user}
           setUser={setUser}
           onMobileMenuClick={() => setMobileOpen(true)}
         />
 
-        {/* Filter & Search Bar Toolbar */}
-        <div className="my-6 space-y-4">
+        {/* Linear Toolbar */}
+        <div className="my-5 space-y-3">
           <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-            {/* Search Input */}
+            {/* Search Input (Linear surface-1) */}
             <div className="relative flex-1 max-w-md">
               <Search
-                size={17}
-                className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                size={15}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-[#8a8f98] pointer-events-none"
               />
               <input
                 type="text"
-                placeholder="Search transactions by title or category..."
+                placeholder="Filter by description or category..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                className="w-full pl-10 pr-9 py-2.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-[#111827] text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 shadow-xs transition"
+                className="w-full pl-8 pr-8 py-1.5 rounded-[8px] border border-[#23252a] focus:border-[#5e69d1] focus:ring-1 focus:ring-[#5e69d1] bg-[#0f1011] text-[13px] text-[#f7f8f8] placeholder-[#62666d] outline-none transition"
               />
               {search && (
                 <button
                   onClick={() => setSearch("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#8a8f98] hover:text-[#f7f8f8]"
                 >
-                  <X size={15} />
+                  <X size={14} />
                 </button>
               )}
             </div>
 
-            {/* Type & Category Filters */}
-            <div className="flex items-center gap-2.5 flex-wrap">
-              {/* Type segmented pills */}
-              <div className="flex items-center p-1 rounded-xl bg-white dark:bg-[#111827] border border-slate-200/80 dark:border-slate-800 shadow-xs">
+            {/* Linear Pill Tabs (pricing-tab-default & pricing-tab-selected) */}
+            <div className="flex items-center gap-2 flex-wrap">
+              <div className="flex items-center p-0.5 rounded-full bg-[#0f1011] border border-[#23252a]">
                 <button
                   onClick={() => setTypeFilter("all")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                  className={`px-3 py-1 rounded-full text-[12px] font-medium transition cursor-pointer ${
                     typeFilter === "all"
-                      ? "bg-indigo-600 text-white shadow-xs"
-                      : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                      ? "bg-[#141516] text-[#f7f8f8] border border-[#34343a]"
+                      : "text-[#8a8f98] hover:text-[#f7f8f8]"
                   }`}
                 >
                   All
                 </button>
                 <button
                   onClick={() => setTypeFilter("expense")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                  className={`px-3 py-1 rounded-full text-[12px] font-medium transition cursor-pointer ${
                     typeFilter === "expense"
-                      ? "bg-rose-600 text-white shadow-xs"
-                      : "text-slate-600 dark:text-slate-400 hover:text-rose-600"
+                      ? "bg-[#141516] text-[#eb5757] border border-[#34343a]"
+                      : "text-[#8a8f98] hover:text-[#eb5757]"
                   }`}
                 >
                   Expenses
                 </button>
                 <button
                   onClick={() => setTypeFilter("income")}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition cursor-pointer ${
+                  className={`px-3 py-1 rounded-full text-[12px] font-medium transition cursor-pointer ${
                     typeFilter === "income"
-                      ? "bg-emerald-600 text-white shadow-xs"
-                      : "text-slate-600 dark:text-slate-400 hover:text-emerald-600"
+                      ? "bg-[#141516] text-[#27a644] border border-[#34343a]"
+                      : "text-[#8a8f98] hover:text-[#27a644]"
                   }`}
                 >
                   Income
                 </button>
               </div>
 
-              {/* Category selector */}
+              {/* Category Dropdown */}
               {allCategories.length > 0 && (
                 <div className="relative">
                   <select
                     value={categoryFilter}
                     onChange={(e) => setCategoryFilter(e.target.value)}
-                    className="appearance-none pl-3 pr-8 py-2 rounded-xl text-xs font-semibold bg-white dark:bg-[#111827] border border-slate-200/80 dark:border-slate-800 text-slate-700 dark:text-slate-300 outline-none focus:border-indigo-500 shadow-xs cursor-pointer"
+                    className="appearance-none pl-3 pr-7 py-1 rounded-[8px] text-[12px] font-medium bg-[#0f1011] border border-[#23252a] text-[#d0d6e0] outline-none focus:border-[#5e69d1] cursor-pointer"
                   >
                     <option value="all">All Categories</option>
                     {allCategories.map((cat) => (
@@ -196,19 +187,19 @@ export function TransactionPage() {
                     ))}
                   </select>
                   <Filter
-                    size={13}
-                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none"
+                    size={11}
+                    className="absolute right-2.5 top-1/2 -translate-y-1/2 text-[#8a8f98] pointer-events-none"
                   />
                 </div>
               )}
             </div>
           </div>
 
-          {/* Filter results count & summary badges */}
-          <div className="flex items-center justify-between text-xs text-slate-500 dark:text-slate-400 px-1">
+          {/* Results count indicator */}
+          <div className="flex items-center justify-between text-[12px] text-[#8a8f98] px-1 font-mono">
             <span>
-              Showing <strong className="text-slate-900 dark:text-white">{filteredTransactions.length}</strong> of{" "}
-              {transactions.length} transactions
+              Showing <strong className="text-[#f7f8f8]">{filteredTransactions.length}</strong> of{" "}
+              {transactions.length} entries
             </span>
 
             {(search || typeFilter !== "all" || categoryFilter !== "all") && (
@@ -218,9 +209,9 @@ export function TransactionPage() {
                   setTypeFilter("all");
                   setCategoryFilter("all");
                 }}
-                className="text-indigo-600 dark:text-indigo-400 font-semibold hover:underline cursor-pointer"
+                className="text-[#5e6ad2] hover:text-[#828fff] text-[12px] font-medium cursor-pointer"
               >
-                Clear all filters
+                Reset filters
               </button>
             )}
           </div>

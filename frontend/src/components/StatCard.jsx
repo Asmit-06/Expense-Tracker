@@ -1,11 +1,10 @@
 import {
   IndianRupee,
   Wallet,
-  TrendingUp,
-  TrendingDown,
-  Receipt,
   ArrowUpRight,
-  ArrowDownRight,
+  ArrowDownLeft,
+  Receipt,
+  TrendingUp,
 } from "lucide-react";
 
 export function StatCard({
@@ -25,39 +24,31 @@ export function StatCard({
       isCurrency: true,
       percentage: monthlyBalancePercentage,
       icon: Wallet,
-      iconColor: "text-indigo-600 dark:text-indigo-400",
-      iconBg: "bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-100 dark:border-indigo-900/50",
-      accentGlow: "from-indigo-500/10",
+      accentColor: "text-[#5e6ad2]",
     },
     {
       title: "Total Income",
       value: income,
       isCurrency: true,
       percentage: monthlyIncomePercentage,
-      icon: TrendingUp,
-      iconColor: "text-emerald-600 dark:text-emerald-400",
-      iconBg: "bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-100 dark:border-emerald-900/50",
-      accentGlow: "from-emerald-500/10",
+      icon: ArrowUpRight,
+      accentColor: "text-[#27a644]",
     },
     {
       title: "Total Expenses",
       value: expense,
       isCurrency: true,
       percentage: monthlyExpensePercentage,
-      icon: TrendingDown,
-      iconColor: "text-rose-600 dark:text-rose-400",
-      iconBg: "bg-rose-50 dark:bg-rose-950/50 border border-rose-100 dark:border-rose-900/50",
-      accentGlow: "from-rose-500/10",
+      icon: ArrowDownLeft,
+      accentColor: "text-[#eb5757]",
     },
     {
-      title: "Total Transactions",
+      title: "Transactions Count",
       value: totalNoOfTransactions,
       isCurrency: false,
       diff: transactionDiff,
       icon: Receipt,
-      iconColor: "text-violet-600 dark:text-violet-400",
-      iconBg: "bg-violet-50 dark:bg-violet-950/50 border border-violet-100 dark:border-violet-900/50",
-      accentGlow: "from-violet-500/10",
+      accentColor: "text-[#8a8f98]",
     },
   ];
 
@@ -71,29 +62,27 @@ export function StatCard({
         return (
           <div
             key={idx}
-            className="relative overflow-hidden rounded-2xl bg-white dark:bg-[#111827] border border-slate-200/80 dark:border-slate-800 p-5 shadow-xs hover:shadow-md transition-all duration-200 group"
+            className="rounded-[12px] bg-[#0f1011] border border-[#23252a] hover:border-[#34343a] p-5 sm:p-6 transition-colors duration-150 flex flex-col justify-between"
           >
-            {/* Top row: Title and Icon Badge */}
+            {/* Top row: Eyebrow label and micro icon */}
             <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+              <span className="text-[12px] font-medium uppercase tracking-[0.4px] text-[#8a8f98]">
                 {card.title}
               </span>
-              <div
-                className={`w-10 h-10 rounded-xl flex items-center justify-center transition-transform group-hover:scale-105 ${card.iconBg}`}
-              >
-                <Icon size={19} className={card.iconColor} strokeWidth={2.2} />
+              <div className="w-7 h-7 rounded-[6px] bg-[#141516] border border-[#23252a] flex items-center justify-center">
+                <Icon size={14} className={card.accentColor} strokeWidth={2.2} />
               </div>
             </div>
 
-            {/* Middle row: Big Metric Number */}
-            <div className="mt-3.5 flex items-baseline gap-1">
+            {/* Middle row: Big Metric Number in JetBrains Mono */}
+            <div className="my-4 flex items-baseline gap-1">
               {card.isCurrency && (
                 <IndianRupee
-                  size={20}
-                  className="text-slate-400 dark:text-slate-500 self-center"
+                  size={19}
+                  className="text-[#8a8f98] self-center shrink-0"
                 />
               )}
-              <span className="text-2xl lg:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+              <span className="text-[26px] sm:text-[28px] font-semibold text-[#f7f8f8] font-mono tracking-[-1.0px]">
                 {card.isCurrency
                   ? Number(card.value).toLocaleString("en-IN", {
                       minimumFractionDigits: 0,
@@ -103,26 +92,20 @@ export function StatCard({
               </span>
             </div>
 
-            {/* Bottom row: Trend Comparison */}
-            <div className="mt-3 flex items-center gap-2 text-xs">
+            {/* Bottom row: Trend Comparison Pill */}
+            <div className="flex items-center gap-2 text-[12px]">
               <span
-                className={`inline-flex items-center gap-0.5 font-bold px-1.5 py-0.5 rounded-md ${
-                  isPositive
-                    ? "bg-emerald-50 dark:bg-emerald-950/40 text-emerald-600 dark:text-emerald-400"
-                    : "bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400"
+                className={`inline-flex items-center gap-1 font-mono font-medium px-2 py-0.5 rounded-full text-[11px] border border-[#23252a] bg-[#141516] ${
+                  isPositive ? "text-[#27a644]" : "text-[#eb5757]"
                 }`}
               >
-                {isPositive ? (
-                  <ArrowUpRight size={13} strokeWidth={2.5} />
-                ) : (
-                  <ArrowDownRight size={13} strokeWidth={2.5} />
-                )}
+                {isPositive ? "+" : "-"}
                 {card.percentage !== undefined
                   ? `${Math.abs(card.percentage).toFixed(1)}%`
                   : `${Math.abs(card.diff)}`}
               </span>
-              <span className="text-slate-400 dark:text-slate-500 font-medium">
-                vs last month
+              <span className="text-[#62666d] text-[11px] tracking-[-0.05px]">
+                from last month
               </span>
             </div>
           </div>

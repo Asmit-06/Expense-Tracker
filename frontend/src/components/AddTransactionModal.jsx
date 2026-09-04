@@ -1,15 +1,7 @@
 import { useEffect, useState } from "react";
 import api from "../api/axios.js";
 import toast from "react-hot-toast";
-import {
-  X,
-  IndianRupee,
-  Calendar,
-  Tag,
-  ArrowUpRight,
-  ArrowDownLeft,
-  Layers,
-} from "lucide-react";
+import { X, IndianRupee } from "lucide-react";
 
 export function AddTransactionModal({
   closeModal,
@@ -58,7 +50,7 @@ export function AddTransactionModal({
     setFormData((prev) => ({
       ...prev,
       type: newType,
-      category: "", // Reset category when switching type
+      category: "",
     }));
   };
 
@@ -72,7 +64,7 @@ export function AddTransactionModal({
       !formData.type ||
       !formData.date
     ) {
-      toast.error("Please fill in all the required fields");
+      toast.error("Please fill in all required fields");
       return;
     }
 
@@ -81,19 +73,14 @@ export function AddTransactionModal({
       return;
     }
 
-    if (Number(formData.amount) > 99999999) {
-      toast.error("Amount exceeds maximum supported limit");
-      return;
-    }
-
     setSubmitting(true);
     try {
       if (isEditMode) {
         await api.put(`/api/transactions/${selectedTransaction._id}`, formData);
-        toast.success("Transaction updated successfully");
+        toast.success("Transaction updated");
       } else {
         await api.post("/api/transactions", formData);
-        toast.success("Transaction added successfully");
+        toast.success("Transaction created");
       }
       closeModal();
       fetchTransactions();
@@ -130,86 +117,81 @@ export function AddTransactionModal({
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
-      <div className="relative w-full max-w-md rounded-3xl bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800 p-6 sm:p-7 shadow-2xl transition-all">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#000000]/80">
+      <div className="relative w-full max-w-md rounded-[12px] bg-[#0f1011] border border-[#23252a] p-6 shadow-2xl">
         {/* Header */}
-        <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+        <div className="flex items-center justify-between pb-3 border-b border-[#23252a]">
           <div>
-            <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+            <h2 className="text-[17px] font-semibold text-[#f7f8f8] tracking-[-0.4px]">
               {isEditMode ? "Edit Transaction" : "New Transaction"}
             </h2>
-            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
-              {isEditMode ? "Update your transaction details" : "Record your income or expense"}
+            <p className="text-[12px] text-[#8a8f98] mt-0.5">
+              Record cash inflow or outflow entry
             </p>
           </div>
           <button
             onClick={closeModal}
-            className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+            className="p-1 rounded-[6px] text-[#8a8f98] hover:text-[#f7f8f8] hover:bg-[#141516] transition cursor-pointer"
           >
-            <X size={18} />
+            <X size={16} />
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="mt-5 space-y-4">
-          {/* Segmented Type Toggle (Expense / Income) */}
+        <form onSubmit={handleSubmit} className="mt-4 space-y-3.5">
+          {/* Type selector (Surface-2) */}
           <div>
-            <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block mb-1.5">
-              Transaction Type
+            <label className="text-[11px] font-medium uppercase tracking-[0.4px] text-[#8a8f98] block mb-1">
+              Type
             </label>
-            <div className="grid grid-cols-2 gap-2 p-1 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200/50 dark:border-slate-700/50">
+            <div className="grid grid-cols-2 gap-1.5 p-1 rounded-[8px] bg-[#141516] border border-[#23252a]">
               <button
                 type="button"
                 onClick={() => handleTypeChange("expense")}
-                className={`flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`py-1.5 rounded-[6px] text-[12px] font-medium transition cursor-pointer ${
                   formData.type === "expense"
-                    ? "bg-white dark:bg-slate-900 text-rose-600 dark:text-rose-400 shadow-xs"
-                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                    ? "bg-[#18191a] text-[#eb5757] border border-[#34343a]"
+                    : "text-[#8a8f98] hover:text-[#f7f8f8]"
                 }`}
               >
-                <ArrowDownLeft size={15} strokeWidth={2.5} />
-                <span>Expense</span>
+                Expense
               </button>
               <button
                 type="button"
                 onClick={() => handleTypeChange("income")}
-                className={`flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                className={`py-1.5 rounded-[6px] text-[12px] font-medium transition cursor-pointer ${
                   formData.type === "income"
-                    ? "bg-white dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 shadow-xs"
-                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                    ? "bg-[#18191a] text-[#27a644] border border-[#34343a]"
+                    : "text-[#8a8f98] hover:text-[#f7f8f8]"
                 }`}
               >
-                <ArrowUpRight size={15} strokeWidth={2.5} />
-                <span>Income</span>
+                Income
               </button>
             </div>
           </div>
 
           {/* Title */}
           <div>
-            <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block mb-1.5">
-              Title / Description
+            <label className="text-[11px] font-medium uppercase tracking-[0.4px] text-[#8a8f98] block mb-1">
+              Title
             </label>
-            <div className="relative flex items-center">
-              <Tag size={16} className="absolute left-3 text-slate-400 pointer-events-none" />
-              <input
-                type="text"
-                name="title"
-                required
-                placeholder="e.g. Grocery Store, Salary, Coffee"
-                value={formData.title}
-                onChange={handleChange}
-                className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/90 text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition"
-              />
-            </div>
+            <input
+              type="text"
+              name="title"
+              required
+              placeholder="e.g. AWS Hosting, Salary, Groceries"
+              value={formData.title}
+              onChange={handleChange}
+              className="w-full px-3 py-2 rounded-[8px] border border-[#23252a] focus:border-[#5e69d1] focus:ring-1 focus:ring-[#5e69d1] bg-[#141516] text-[13px] text-[#f7f8f8] placeholder-[#62666d] outline-none transition"
+            />
           </div>
 
           {/* Amount */}
           <div>
-            <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block mb-1.5">
+            <label className="text-[11px] font-medium uppercase tracking-[0.4px] text-[#8a8f98] block mb-1">
               Amount (INR)
             </label>
             <div className="relative flex items-center">
-              <IndianRupee size={16} className="absolute left-3 text-slate-400 pointer-events-none" />
+              <IndianRupee size={14} className="absolute left-3 text-[#8a8f98] pointer-events-none" />
               <input
                 type="number"
                 name="amount"
@@ -219,74 +201,66 @@ export function AddTransactionModal({
                 placeholder="0.00"
                 value={formData.amount}
                 onChange={handleChange}
-                className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/90 text-sm font-semibold text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition"
+                className="w-full pl-8 pr-3 py-2 rounded-[8px] border border-[#23252a] focus:border-[#5e69d1] focus:ring-1 focus:ring-[#5e69d1] bg-[#141516] text-[13px] font-mono text-[#f7f8f8] placeholder-[#62666d] outline-none transition"
               />
             </div>
           </div>
 
-          {/* Category & Date in 2 columns */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {/* Category */}
+          {/* Category & Date */}
+          <div className="grid grid-cols-2 gap-3">
             <div>
-              <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block mb-1.5">
+              <label className="text-[11px] font-medium uppercase tracking-[0.4px] text-[#8a8f98] block mb-1">
                 Category
               </label>
-              <div className="relative flex items-center">
-                <Layers size={16} className="absolute left-3 text-slate-400 pointer-events-none" />
-                <select
-                  name="category"
-                  required
-                  value={formData.category}
-                  onChange={handleChange}
-                  className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/90 text-xs sm:text-sm text-slate-900 dark:text-white outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition cursor-pointer"
-                >
-                  <option value="">Select Category</option>
-                  {(formData.type === "expense" ? expenseCategories : incomeCategories).map(
-                    (cat) => (
-                      <option key={cat} value={cat}>
-                        {cat}
-                      </option>
-                    )
-                  )}
-                </select>
-              </div>
+              <select
+                name="category"
+                required
+                value={formData.category}
+                onChange={handleChange}
+                className="w-full px-2.5 py-2 rounded-[8px] border border-[#23252a] focus:border-[#5e69d1] focus:ring-1 focus:ring-[#5e69d1] bg-[#141516] text-[12px] text-[#f7f8f8] outline-none transition cursor-pointer"
+              >
+                <option value="">Select</option>
+                {(formData.type === "expense" ? expenseCategories : incomeCategories).map(
+                  (cat) => (
+                    <option key={cat} value={cat}>
+                      {cat}
+                    </option>
+                  )
+                )}
+              </select>
             </div>
 
-            {/* Date */}
             <div>
-              <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block mb-1.5">
+              <label className="text-[11px] font-medium uppercase tracking-[0.4px] text-[#8a8f98] block mb-1">
                 Date
               </label>
-              <div className="relative flex items-center">
-                <Calendar size={16} className="absolute left-3 text-slate-400 pointer-events-none" />
-                <input
-                  type="date"
-                  name="date"
-                  required
-                  value={formData.date}
-                  onChange={handleChange}
-                  className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/90 text-xs sm:text-sm text-slate-900 dark:text-white outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition"
-                />
-              </div>
+              <input
+                type="date"
+                name="date"
+                required
+                value={formData.date}
+                onChange={handleChange}
+                className="w-full px-2.5 py-1.5 rounded-[8px] border border-[#23252a] focus:border-[#5e69d1] focus:ring-1 focus:ring-[#5e69d1] bg-[#141516] text-[12px] text-[#f7f8f8] outline-none transition"
+              />
             </div>
           </div>
 
-          {/* Form Actions */}
-          <div className="pt-3 flex items-center justify-end gap-2.5">
+          {/* Form Actions (Linear button-secondary & button-primary) */}
+          <div className="pt-2 flex items-center justify-end gap-2">
             <button
               type="button"
               onClick={closeModal}
               disabled={submitting}
-              className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
+              className="px-3.5 py-1.5 rounded-[8px] border border-[#23252a] bg-[#141516] hover:bg-[#18191a] text-[13px] font-medium text-[#f7f8f8] transition cursor-pointer"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={submitting}
-              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs sm:text-sm font-bold shadow-sm shadow-indigo-500/25 active:scale-[0.98] transition cursor-pointer disabled:opacity-60"
+              className="px-3.5 py-1.5 rounded-[8px] bg-[#5e6ad2] hover:bg-[#828fff] active:bg-[#5e69d1] text-[13px] font-medium text-white transition cursor-pointer disabled:opacity-60"
             >
-              {submitting ? "Saving..." : isEditMode ? "Save Changes" : "Create Transaction"}
+              {submitting ? "Saving..." : isEditMode ? "Update" : "Create"}
             </button>
           </div>
         </form>

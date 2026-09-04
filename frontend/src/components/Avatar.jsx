@@ -11,7 +11,7 @@ export function AvatarDropdown({ user, setUser }) {
   const [uploading, setUploading] = useState(false);
   const navigate = useNavigate();
 
-  // Close dropdown on outside click
+  // Close dropdown on click outside
   useEffect(() => {
     function handleClickOutside(event) {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -25,7 +25,7 @@ export function AvatarDropdown({ user, setUser }) {
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("refreshToken");
-    toast.success("Logged out successfully");
+    toast.success("Signed out");
     navigate("/login");
   };
 
@@ -34,7 +34,7 @@ export function AvatarDropdown({ user, setUser }) {
     if (!file) return;
 
     if (file.size > 5 * 1024 * 1024) {
-      toast.error("Image size must be less than 5MB");
+      toast.error("File exceeds 5MB limit");
       return;
     }
 
@@ -42,14 +42,14 @@ export function AvatarDropdown({ user, setUser }) {
     formData.append("avatar", file);
 
     setUploading(true);
-    const toastId = toast.loading("Uploading new avatar...");
+    const toastId = toast.loading("Updating avatar...");
     try {
       const res = await api.patch("/api/auth/avatar", formData);
       setUser({
         ...user,
         avatar: res.data.avatar,
       });
-      toast.success("Avatar updated successfully!", { id: toastId });
+      toast.success("Avatar updated", { id: toastId });
     } catch (err) {
       toast.error(err.response?.data?.message || "Upload failed", { id: toastId });
     } finally {
@@ -72,10 +72,10 @@ export function AvatarDropdown({ user, setUser }) {
       {/* Avatar Trigger Button */}
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center gap-2.5 p-1 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800/80 transition cursor-pointer"
+        className="flex items-center gap-2 p-1 rounded-[8px] hover:bg-[#0f1011] transition cursor-pointer"
         aria-label="User menu"
       >
-        <div className="relative w-10 h-10 rounded-full overflow-hidden bg-gradient-to-tr from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-sm ring-2 ring-indigo-500/20 shadow-xs">
+        <div className="relative w-8 h-8 rounded-full overflow-hidden bg-[#18191a] border border-[#23252a] hover:border-[#5e6ad2] flex items-center justify-center text-[#f7f8f8] font-medium text-[12px] transition">
           {user?.avatar ? (
             <img
               src={user.avatar}
@@ -88,24 +88,23 @@ export function AvatarDropdown({ user, setUser }) {
         </div>
 
         <ChevronDown
-          className={`text-slate-400 dark:text-slate-400 transition-transform duration-200 hidden sm:block ${
-            open ? "rotate-180" : ""
+          className={`text-[#8a8f98] transition-transform duration-150 hidden sm:block ${
+            open ? "rotate-180 text-[#f7f8f8]" : ""
           }`}
-          size={16}
+          size={14}
         />
       </button>
 
-      {/* Dropdown Menu */}
+      {/* Dropdown Menu - Surface-2 #141516 */}
       {open && (
-        <div className="absolute right-0 mt-2.5 w-64 rounded-2xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-[#111827] shadow-xl overflow-hidden z-50 animate-in fade-in slide-in-from-top-2 duration-150">
+        <div className="absolute right-0 mt-2 w-60 rounded-[8px] border border-[#23252a] bg-[#141516] shadow-xl overflow-hidden z-50 animate-in fade-in duration-100">
           {/* User Info Header */}
-          <div className="p-4 border-b border-slate-100 dark:border-slate-800">
-            <div className="flex items-center gap-3">
-              {/* Clickable avatar with hover camera icon */}
+          <div className="p-3.5 border-b border-[#23252a]">
+            <div className="flex items-center gap-2.5">
               <div
                 onClick={() => fileInputRef.current?.click()}
-                className="group relative w-12 h-12 rounded-full overflow-hidden bg-gradient-to-tr from-indigo-500 to-violet-600 flex items-center justify-center text-white font-bold text-base cursor-pointer shrink-0 ring-2 ring-indigo-500/30"
-                title="Click to change profile picture"
+                className="group relative w-10 h-10 rounded-full overflow-hidden bg-[#18191a] border border-[#23252a] flex items-center justify-center text-[#f7f8f8] font-medium text-xs cursor-pointer shrink-0"
+                title="Change avatar"
               >
                 {user?.avatar ? (
                   <img
@@ -116,34 +115,34 @@ export function AvatarDropdown({ user, setUser }) {
                 ) : (
                   <span className="group-hover:opacity-40 transition">{initial}</span>
                 )}
-                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-black/40 transition">
-                  <Camera size={16} className="text-white" />
+                <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 bg-[#000000]/60 transition">
+                  <Camera size={13} className="text-[#f7f8f8]" />
                 </div>
               </div>
 
               <div className="min-w-0 flex-1">
-                <h3 className="font-semibold text-sm text-slate-900 dark:text-white truncate">
+                <h3 className="font-medium text-[13px] text-[#f7f8f8] truncate">
                   {user?.username || "Account"}
                 </h3>
-                <p className="text-xs text-slate-500 dark:text-slate-400 truncate flex items-center gap-1 mt-0.5">
-                  <Mail size={12} className="shrink-0" />
+                <p className="text-[11px] text-[#8a8f98] truncate flex items-center gap-1 mt-0.5">
+                  <Mail size={11} className="shrink-0 text-[#62666d]" />
                   <span className="truncate">{user?.email}</span>
                 </p>
               </div>
             </div>
-            <p className="text-[11px] text-slate-400 dark:text-slate-500 mt-2.5 text-center">
-              {uploading ? "Uploading photo..." : "Click avatar to change photo"}
+            <p className="text-[10px] text-[#62666d] mt-2 text-center">
+              {uploading ? "Uploading..." : "Click photo to change"}
             </p>
           </div>
 
           {/* Action List */}
-          <div className="p-1.5">
+          <div className="p-1">
             <button
               onClick={handleLogout}
-              className="w-full flex items-center gap-2.5 px-3 py-2 text-sm font-medium text-rose-600 dark:text-rose-400 hover:bg-rose-50 dark:hover:bg-rose-950/40 rounded-xl transition cursor-pointer text-left"
+              className="w-full flex items-center gap-2 px-3 py-2 text-[13px] font-medium text-[#8a8f98] hover:text-[#f7f8f8] hover:bg-[#18191a] rounded-[6px] transition cursor-pointer text-left"
             >
-              <LogOut size={16} />
-              <span>Log out</span>
+              <LogOut size={14} />
+              <span>Sign out</span>
             </button>
           </div>
         </div>

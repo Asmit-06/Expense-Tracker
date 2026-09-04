@@ -1,7 +1,6 @@
-import { Plus, Sun, Moon, Menu } from "lucide-react";
+import { Plus, Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import { AvatarDropdown } from "./Avatar";
-import { useTheme } from "../context/ThemeContext";
 
 export function Header({
   handleAddTransaction,
@@ -11,53 +10,40 @@ export function Header({
   subtitle,
   onMobileMenuClick,
 }) {
-  const { darkMode, toggleTheme } = useTheme();
-
   return (
-    <header className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-slate-200/80 dark:border-slate-800/80">
+    <header className="flex items-center justify-between gap-4 pb-5 mb-6 border-b border-[#23252a]">
+      {/* Title & Metadata */}
       <div className="flex items-center gap-3">
         {onMobileMenuClick && (
           <button
             onClick={onMobileMenuClick}
             aria-label="Open navigation menu"
-            className="lg:hidden p-2 rounded-xl border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+            className="lg:hidden p-2 rounded-[8px] border border-[#23252a] bg-[#0f1011] text-[#8a8f98] hover:text-[#f7f8f8] hover:bg-[#141516] transition cursor-pointer"
           >
-            <Menu size={20} />
+            <Menu size={18} />
           </button>
         )}
         <div>
-          <h1 className="text-2xl lg:text-3xl font-extrabold tracking-tight text-slate-900 dark:text-white">
+          <h1 className="text-[22px] sm:text-[26px] font-semibold text-[#f7f8f8] tracking-[-0.6px]">
             {title}
           </h1>
-          <p className="text-xs sm:text-sm font-medium text-slate-500 dark:text-slate-400 mt-0.5">
-            {subtitle || (user?.username ? `Welcome back, ${user.username} 👋` : "Track and optimize your cash flow")}
+          <p className="text-[13px] text-[#8a8f98] mt-0.5 tracking-[-0.05px]">
+            {subtitle || (user?.username ? `Logged in as ${user.username}` : "Personal finance & liquidity tracker")}
           </p>
         </div>
       </div>
 
-      <div className="flex items-center gap-3 self-end sm:self-auto">
-        {/* Dark/Light Mode Switcher */}
-        <button
-          onClick={toggleTheme}
-          aria-label="Toggle color theme"
-          className="p-2.5 rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 hover:text-slate-900 dark:hover:text-white transition shadow-xs cursor-pointer"
-          title={darkMode ? "Switch to Light Mode" : "Switch to Dark Mode"}
-        >
-          {darkMode ? (
-            <Sun size={19} className="text-amber-400 transition-transform rotate-0 hover:rotate-45 duration-300" />
-          ) : (
-            <Moon size={19} className="text-slate-700 transition-transform rotate-0 hover:-rotate-12 duration-300" />
-          )}
-        </button>
-
-        {/* Add Transaction Primary CTA */}
+      {/* Action Buttons */}
+      <div className="flex items-center gap-3">
+        {/* Primary CTA (button-primary in Linear spec: #5e6ad2, rounded 8px, 14px text) */}
         {handleAddTransaction && (
           <button
             onClick={handleAddTransaction}
-            className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-sm font-semibold px-4 py-2.5 rounded-xl shadow-sm shadow-indigo-500/25 active:scale-[0.98] transition cursor-pointer"
+            className="bg-[#5e6ad2] hover:bg-[#828fff] active:bg-[#5e69d1] text-white text-[14px] font-medium leading-[1.2] px-[14px] py-[8px] rounded-[8px] transition duration-150 flex items-center gap-2 cursor-pointer shadow-none"
           >
-            <Plus size={18} strokeWidth={2.5} />
-            <span>Add Transaction</span>
+            <Plus size={15} strokeWidth={2.4} />
+            <span className="hidden sm:inline">Add Transaction</span>
+            <span className="sm:hidden">Add</span>
           </button>
         )}
 
@@ -65,9 +51,9 @@ export function Header({
         {!user ? (
           <Link
             to="/login"
-            className="inline-flex items-center text-sm font-semibold px-4 py-2.5 rounded-xl border border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white dark:border-indigo-400 dark:text-indigo-400 dark:hover:bg-indigo-500 dark:hover:text-white transition cursor-pointer"
+            className="bg-[#0f1011] hover:bg-[#141516] text-[#f7f8f8] text-[14px] font-medium leading-[1.2] px-[14px] py-[8px] rounded-[8px] border border-[#23252a] transition cursor-pointer"
           >
-            Sign In
+            Sign in
           </Link>
         ) : (
           <AvatarDropdown user={user} setUser={setUser} />

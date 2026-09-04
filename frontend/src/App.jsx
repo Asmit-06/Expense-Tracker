@@ -8,25 +8,34 @@ import { ProtectedRoute } from "./components/ProtectedRoute";
 import { PublicRoute } from "./components/PublicRoute";
 import { ForgotPassword } from "./pages/ForgotPassword";
 import { ResetPassword } from "./pages/ResetPassword";
-import { ThemeProvider, useTheme } from "./context/ThemeContext";
 
-function AppContent() {
-  const { darkMode } = useTheme();
-
+function App() {
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-900 dark:bg-[#0b0f19] dark:text-slate-100 transition-colors duration-200">
+    <div className="min-h-screen bg-[#010102] text-[#f7f8f8] selection:bg-[#5e6ad2]/30 selection:text-white">
       <Toaster
         position="top-right"
         toastOptions={{
           duration: 3500,
           style: {
-            background: darkMode ? "#1e293b" : "#ffffff",
-            color: darkMode ? "#f1f5f9" : "#0f172a",
-            border: darkMode ? "1px solid #334155" : "1px solid #e2e8f0",
-            borderRadius: "12px",
-            boxShadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1)",
-            fontSize: "14px",
+            background: "#0f1011",
+            color: "#f7f8f8",
+            border: "1px solid #23252a",
+            borderRadius: "8px",
+            fontSize: "13px",
             fontWeight: 500,
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.5)",
+          },
+          success: {
+            iconTheme: {
+              primary: "#27a644",
+              secondary: "#0f1011",
+            },
+          },
+          error: {
+            iconTheme: {
+              primary: "#eb5757",
+              secondary: "#0f1011",
+            },
           },
         }}
       />
@@ -39,14 +48,6 @@ function AppContent() {
         <Route path="/reset-password/:token" element={<PublicRoute><ResetPassword /></PublicRoute>} />
       </Routes>
     </div>
-  );
-}
-
-function App() {
-  return (
-    <ThemeProvider>
-      <AppContent />
-    </ThemeProvider>
   );
 }
 

@@ -310,7 +310,7 @@ export function DashBoard() {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   return (
-    <div className="min-h-screen flex bg-slate-50 dark:bg-[#0b0f19] transition-colors duration-200">
+    <div className="min-h-screen flex bg-[#010102] text-[#f7f8f8]">
       <Sidebar
         handleAddTransaction={handleAddTransaction}
         balance={income - expense}

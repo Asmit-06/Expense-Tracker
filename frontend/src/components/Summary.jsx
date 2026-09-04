@@ -11,7 +11,7 @@ export function Summary({
   transactionDiff,
 }) {
   return (
-    <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 sm:gap-5 my-6">
+    <section className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
       <StatCard
         income={income}
         expense={expense}
