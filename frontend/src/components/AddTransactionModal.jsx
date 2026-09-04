@@ -1,7 +1,16 @@
 import { useEffect, useState } from "react";
-
-import api from "../api/axios.js"
+import api from "../api/axios.js";
 import toast from "react-hot-toast";
+import {
+  X,
+  IndianRupee,
+  Calendar,
+  Tag,
+  ArrowUpRight,
+  ArrowDownLeft,
+  Layers,
+} from "lucide-react";
+
 export function AddTransactionModal({
   closeModal,
   fetchTransactions,
@@ -13,172 +22,271 @@ export function AddTransactionModal({
     title: "",
     amount: "",
     category: "",
-    type: "",
-    date: "",
+    type: "expense",
+    date: new Date().toISOString().split("T")[0],
   });
+  const [submitting, setSubmitting] = useState(false);
+
   useEffect(() => {
     if (isEditMode) {
       setFormData({
-        title: selectedTransaction.title,
-        amount: selectedTransaction.amount,
-        category: selectedTransaction.category,
-        type: selectedTransaction.type,
-        date: selectedTransaction.date.split("T")[0],
+        title: selectedTransaction.title || "",
+        amount: selectedTransaction.amount || "",
+        category: selectedTransaction.category || "",
+        type: selectedTransaction.type || "expense",
+        date: selectedTransaction.date
+          ? selectedTransaction.date.split("T")[0]
+          : new Date().toISOString().split("T")[0],
       });
     } else {
       setFormData({
         title: "",
         amount: "",
         category: "",
-        type: "",
-        date: "",
+        type: "expense",
+        date: new Date().toISOString().split("T")[0],
       });
     }
-  }, [selectedTransaction]);
+  }, [selectedTransaction, isEditMode]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prev) => {
-      return { ...prev, [name]: value };
-    });
+    setFormData((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleTypeChange = (newType) => {
+    setFormData((prev) => ({
+      ...prev,
+      type: newType,
+      category: "", // Reset category when switching type
+    }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (
+      !formData.title.trim() ||
+      !formData.amount ||
+      !formData.category ||
+      !formData.type ||
+      !formData.date
+    ) {
+      toast.error("Please fill in all the required fields");
+      return;
+    }
+
+    if (Number(formData.amount) <= 0) {
+      toast.error("Amount must be greater than zero");
+      return;
+    }
+
+    if (Number(formData.amount) > 99999999) {
+      toast.error("Amount exceeds maximum supported limit");
+      return;
+    }
+
+    setSubmitting(true);
     try {
-      if (
-        !formData.title ||
-        !formData.amount ||
-        !formData.category ||
-        !formData.type ||
-        !formData.date
-      ) {
-        toast.error("Please fill all the fields");
-        return;
-
-      }
-      if (formData.amount > 9999999) {
-        toast.error("Amount should be less than 9999999");
-        return;
-      }
-
       if (isEditMode) {
-       
-        await api.put(
-          `/api/transactions/${selectedTransaction._id}`,
-          formData
-        );
+        await api.put(`/api/transactions/${selectedTransaction._id}`, formData);
         toast.success("Transaction updated successfully");
-        closeModal();
-        fetchTransactions();
-
-        return;
+      } else {
+        await api.post("/api/transactions", formData);
+        toast.success("Transaction added successfully");
       }
-      console.log(import.meta.env.VITE_API_URL);
-      await api.post(
-        `/api/transactions/`,
-        formData
-      );
       closeModal();
       fetchTransactions();
-      toast.success("Transaction added successfully");
     } catch (err) {
-      console.log("Error adding transaction", err);
+      toast.error(err.response?.data?.message || "Failed to save transaction");
+    } finally {
+      setSubmitting(false);
     }
   };
 
+  const expenseCategories = [
+    "Food",
+    "Transport",
+    "Entertainment",
+    "Shopping",
+    "Rent",
+    "Bills & Utilities",
+    "Healthcare",
+    "Education",
+    "Travel",
+    "Technology",
+    "Gifts",
+    "Other",
+  ];
+
+  const incomeCategories = [
+    "Salary",
+    "Freelance",
+    "Investments",
+    "Bonus",
+    "Refund",
+    "Gifts",
+    "Other",
+  ];
+
   return (
-    <div className="fixed top-0 left-0 w-full h-full bg-black/60 flex items-center justify-center">
-      <div className="bg-white p-5 rounded-lg w-[400px]  dark:bg-[#0C1017]">
-        <h2 className="text-xl font-bold mb-4 dark:text-white">
-          {isEditMode ? "Update Transaction" : "Add Transaction"}
-        </h2>
-        <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-          <input
-            type="text"
-            placeholder="Title "
-            className="border p-2 rounded dark:bg-[#080B12] dark:placeholder:text-gray-400 dark:text-white"
-            name="title"
-            value={formData.title}
-            onChange={handleChange}
-          />
-          <input
-            type="number"
-            placeholder="Amount"
-            className="border p-2 rounded dark:bg-[#080B12] dark:placeholder:text-gray-400 dark:text-white"
-            min={1}
-            max={9999999}
-            name="amount"
-            value={formData.amount}
-            onChange={handleChange}
-          />
-
-          <select
-            className="border p-2 rounded dark:bg-[#080B12] dark:text-gray-400"
-            name="type"
-            value={formData.type}
-            onChange={handleChange}
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in duration-150">
+      <div className="relative w-full max-w-md rounded-3xl bg-white dark:bg-[#111827] border border-slate-200/90 dark:border-slate-800 p-6 sm:p-7 shadow-2xl transition-all">
+        {/* Header */}
+        <div className="flex items-center justify-between pb-4 border-b border-slate-100 dark:border-slate-800">
+          <div>
+            <h2 className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">
+              {isEditMode ? "Edit Transaction" : "New Transaction"}
+            </h2>
+            <p className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+              {isEditMode ? "Update your transaction details" : "Record your income or expense"}
+            </p>
+          </div>
+          <button
+            onClick={closeModal}
+            className="p-1.5 rounded-xl text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
           >
-            <option value="" >Select Type</option>
-            <option value="income">Income</option>
-            <option value="expense">Expense</option>
-          </select>
-          <select
-            className="border p-2 rounded dark:bg-[#080B12] dark:text-gray-400"
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-          >
-            <option value="">Select Category</option>
+            <X size={18} />
+          </button>
+        </div>
 
-            {formData.type === "expense" ? (
-              <>
-                <option value="Food">Food</option>
-                <option value="Transport">Transport</option>
-                <option value="Entertainment">Entertainment</option>
-                <option value="Shopping">Shopping</option>
-                <option value="Rent">Rent</option>
-                <option value="Bills & Utilities">Bills & Utilities</option>
-                <option value="Healthcare">Healthcare</option>
-                <option value="Education">Education</option>
-                <option value="Travel">Travel</option>
-                <option value="Technology">Technology</option>
-                <option value="Gifts">Gifts</option>
-                <option value="Other">Other</option>
-              </>
-            ) : (
-              <>
-                <option value="Salary">Salary</option>
-                <option value="Freelance">Freelance</option>
-                <option value="Investments">Investments</option>
-                <option value="Gifts">Gifts</option>
-                <option value="Bonus">Bonus</option>
-                <option value="Refund">Refund</option>
-                <option value="Other">Other</option>
-              </>
-            )}
-          </select>
+        <form onSubmit={handleSubmit} className="mt-5 space-y-4">
+          {/* Segmented Type Toggle (Expense / Income) */}
+          <div>
+            <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block mb-1.5">
+              Transaction Type
+            </label>
+            <div className="grid grid-cols-2 gap-2 p-1 rounded-xl bg-slate-100 dark:bg-slate-800/80 border border-slate-200/50 dark:border-slate-700/50">
+              <button
+                type="button"
+                onClick={() => handleTypeChange("expense")}
+                className={`flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  formData.type === "expense"
+                    ? "bg-white dark:bg-slate-900 text-rose-600 dark:text-rose-400 shadow-xs"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                }`}
+              >
+                <ArrowDownLeft size={15} strokeWidth={2.5} />
+                <span>Expense</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => handleTypeChange("income")}
+                className={`flex items-center justify-center gap-2 py-2 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  formData.type === "income"
+                    ? "bg-white dark:bg-slate-900 text-emerald-600 dark:text-emerald-400 shadow-xs"
+                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
+                }`}
+              >
+                <ArrowUpRight size={15} strokeWidth={2.5} />
+                <span>Income</span>
+              </button>
+            </div>
+          </div>
 
-          <input
-            type="date"
-            className="border p-2 rounded dark:bg-[#080B12] bg-white dark:text-gray-400 "
-            name="date"
-            value={formData.date}
-            onChange={handleChange}
-          />
-          <div className="flex items-center justify-between ">
-            <button
-              type="submit"
-              className="bg-blue-500 text-white py-2 px-3 rounded cursor-pointer"
-            >
-              {isEditMode ? "Update" : "Add"}
-            </button>
+          {/* Title */}
+          <div>
+            <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block mb-1.5">
+              Title / Description
+            </label>
+            <div className="relative flex items-center">
+              <Tag size={16} className="absolute left-3 text-slate-400 pointer-events-none" />
+              <input
+                type="text"
+                name="title"
+                required
+                placeholder="e.g. Grocery Store, Salary, Coffee"
+                value={formData.title}
+                onChange={handleChange}
+                className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/90 text-sm text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition"
+              />
+            </div>
+          </div>
+
+          {/* Amount */}
+          <div>
+            <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block mb-1.5">
+              Amount (INR)
+            </label>
+            <div className="relative flex items-center">
+              <IndianRupee size={16} className="absolute left-3 text-slate-400 pointer-events-none" />
+              <input
+                type="number"
+                name="amount"
+                required
+                min="0.01"
+                step="any"
+                placeholder="0.00"
+                value={formData.amount}
+                onChange={handleChange}
+                className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/90 text-sm font-semibold text-slate-900 dark:text-white placeholder-slate-400 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition"
+              />
+            </div>
+          </div>
+
+          {/* Category & Date in 2 columns */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {/* Category */}
+            <div>
+              <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block mb-1.5">
+                Category
+              </label>
+              <div className="relative flex items-center">
+                <Layers size={16} className="absolute left-3 text-slate-400 pointer-events-none" />
+                <select
+                  name="category"
+                  required
+                  value={formData.category}
+                  onChange={handleChange}
+                  className="w-full pl-9 pr-3 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/90 text-xs sm:text-sm text-slate-900 dark:text-white outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition cursor-pointer"
+                >
+                  <option value="">Select Category</option>
+                  {(formData.type === "expense" ? expenseCategories : incomeCategories).map(
+                    (cat) => (
+                      <option key={cat} value={cat}>
+                        {cat}
+                      </option>
+                    )
+                  )}
+                </select>
+              </div>
+            </div>
+
+            {/* Date */}
+            <div>
+              <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 block mb-1.5">
+                Date
+              </label>
+              <div className="relative flex items-center">
+                <Calendar size={16} className="absolute left-3 text-slate-400 pointer-events-none" />
+                <input
+                  type="date"
+                  name="date"
+                  required
+                  value={formData.date}
+                  onChange={handleChange}
+                  className="w-full pl-9 pr-3 py-2 rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900/90 text-xs sm:text-sm text-slate-900 dark:text-white outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Form Actions */}
+          <div className="pt-3 flex items-center justify-end gap-2.5">
             <button
               type="button"
-              className="bg-red-600 text-white py-2 px-3 rounded cursor-pointer"
               onClick={closeModal}
+              disabled={submitting}
+              className="px-4 py-2.5 rounded-xl border border-slate-200 dark:border-slate-700 text-xs sm:text-sm font-semibold text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition cursor-pointer"
             >
               Cancel
+            </button>
+            <button
+              type="submit"
+              disabled={submitting}
+              className="px-5 py-2.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs sm:text-sm font-bold shadow-sm shadow-indigo-500/25 active:scale-[0.98] transition cursor-pointer disabled:opacity-60"
+            >
+              {submitting ? "Saving..." : isEditMode ? "Save Changes" : "Create Transaction"}
             </button>
           </div>
         </form>

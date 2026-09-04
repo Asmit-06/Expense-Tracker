@@ -307,18 +307,23 @@ export function DashBoard() {
     fetchUser()
   }, []);
 
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
-    <div className="app-layout flex min-h-screen ">
+    <div className="min-h-screen flex bg-slate-50 dark:bg-[#0b0f19] transition-colors duration-200">
       <Sidebar
         handleAddTransaction={handleAddTransaction}
         balance={income - expense}
+        mobileOpen={mobileOpen}
+        setMobileOpen={setMobileOpen}
       />
 
-      <main className="flex-1 bg-gray-100 py-8 px-10 dark:bg-[#06070c] ">
+      <main className="flex-1 min-w-0 py-6 px-4 sm:px-8 lg:px-10 overflow-y-auto max-w-7xl mx-auto">
         <Header
           handleAddTransaction={handleAddTransaction}
           user={user}
           setUser={setUser}
+          onMobileMenuClick={() => setMobileOpen(true)}
         />
 
         <Summary
@@ -326,20 +331,13 @@ export function DashBoard() {
           expense={expense}
           balance={income - expense}
           totalNoOfTransactions={totalNoOfTransactions}
-          monthlyIncomePercentage={
-            monthlyIncomePercentage
-          }
-          monthlyExpensePercentage={
-            monthlyExpensePercentage
-          }
-          monthlyBalancePercentage={
-            monthlyBalancePercentage
-          }
-            transactionDiff={transactionDiff}
+          monthlyIncomePercentage={monthlyIncomePercentage}
+          monthlyExpensePercentage={monthlyExpensePercentage}
+          monthlyBalancePercentage={monthlyBalancePercentage}
+          transactionDiff={transactionDiff}
         />
 
         <Charts transactions={transactions} />
-        
 
         <TransactionTable
           transactions={recentTransactions}
@@ -347,6 +345,7 @@ export function DashBoard() {
           deleteTransaction={deleteTransaction}
           handleEdit={handleEdit}
           showViewAll={true}
+          onAddTransaction={handleAddTransaction}
         />
 
         {isOpen && (
