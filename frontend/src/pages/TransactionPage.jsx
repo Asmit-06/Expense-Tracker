@@ -18,7 +18,7 @@ export function TransactionPage() {
       return;
 
     try {
-      await api.delete(`http://localhost:3000/api/transactions/${id}`)
+      await api.delete(`/api/transactions/${id}`);
       fetchTransactions();
       toast.success("Transaction deleted successfully");
     } catch (err) {
@@ -28,7 +28,7 @@ export function TransactionPage() {
 
   const fetchTransactions = async () => {
     try {
-      const res=  await api.get("http://localhost:3000/api/transactions")
+      const res = await api.get("/api/transactions");
       setTransactions(res.data.data);
     } catch (err) {
       console.error("Error fetching transactions", err);

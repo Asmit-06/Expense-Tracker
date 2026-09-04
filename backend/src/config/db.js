@@ -1,6 +1,14 @@
 import dns from 'dns';
-dns.setServers(['8.8.8.8', '8.8.4.4']);
-dns.setDefaultResultOrder('ipv4first');
+try {
+  dns.setServers(['8.8.8.8', '8.8.4.4']);
+} catch {
+  // Ignore in environments where setting custom DNS servers is restricted
+}
+try {
+  dns.setDefaultResultOrder('ipv4first');
+} catch {
+  // Ignore if unsupported
+}
 import mongoose from 'mongoose';
 const connectDB = async ()=>{
   try{

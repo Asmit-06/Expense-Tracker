@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const baseURL = (import.meta.env.VITE_API_URL || "").replace(/\/$/, "");
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL,
+  baseURL,
 });
 
 api.interceptors.request.use((config) => {
@@ -20,30 +22,41 @@ api.interceptors.response.use(
 
     if (
       error.response?.status === 401 &&
-      !originalRequest._retry
+      !originalRequest._retry &&
+      !originalRequest.url?.includes("/api/auth/refresh") &&
+      !originalRequest.url?.includes("/api/auth/login")
     ) {
       originalRequest._retry = true;
 
       const refreshToken = localStorage.getItem("refreshToken");
 
       if (!refreshToken) {
+        localStorage.removeItem("token");
+        window.location.href = "/login";
         return Promise.reject(error);
       }
 
-      const res = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/auth/refresh`,
-        {
-          refreshToken,
-        }
-      );
-      
+      try {
+        const res = await axios.post(
+          `${baseURL}/api/auth/refresh`,
+          {
+            refreshToken,
+          }
+        );
 
-      localStorage.setItem("token", res.data.newAccessToken);
+        localStorage.setItem("token", res.data.newAccessToken);
 
-      originalRequest.headers.Authorization =
-        `Bearer ${res.data.newAccessToken}`;
+        originalRequest.headers.Authorization =
+          `Bearer ${res.data.newAccessToken}`;
 
-      return api(originalRequest);
+        return api(originalRequest);
+      } catch (refreshError) {
+        // Refresh token has expired or is invalid - clear tokens and send user to login
+        localStorage.removeItem("token");
+        localStorage.removeItem("refreshToken");
+        window.location.href = "/login";
+        return Promise.reject(refreshError);
+      }
     }
 
     return Promise.reject(error);
