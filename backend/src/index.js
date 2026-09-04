@@ -8,22 +8,41 @@ dotenv.config();
 
 const app = express();
 
-const rawClientUrls = process.env.CLIENT_URL
-  ? process.env.CLIENT_URL.split(",").map((url) => url.trim().replace(/\/$/, ""))
-  : ["http://localhost:5173"];
+const isAllowedOrigin = (origin) => {
+  if (!origin) return true;
+  const clean = origin.trim().replace(/\/$/, "").toLowerCase();
+
+  // 1. Allow all localhost development ports
+  if (/^http:\/\/localhost(:\d+)?$/.test(clean)) return true;
+
+  // 2. Allow all Vercel domains (*.vercel.app)
+  if (/^https:\/\/[a-z0-9-_.]+\.vercel\.app$/.test(clean)) return true;
+
+  // 3. Allow origins configured in CLIENT_URL (comma-separated, quotes stripped)
+  if (process.env.CLIENT_URL) {
+    const list = process.env.CLIENT_URL
+      .split(",")
+      .map((u) => u.trim().replace(/^["']|["']$/g, "").replace(/\/$/, "").toLowerCase())
+      .filter(Boolean);
+    if (list.includes(clean) || list.includes("*")) return true;
+  }
+
+  return false;
+};
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (e.g. mobile apps, curl, postman)
-      if (!origin) return callback(null, true);
-      const cleanOrigin = origin.replace(/\/$/, "");
-      if (rawClientUrls.includes(cleanOrigin) || rawClientUrls.includes("*")) {
+      if (isAllowedOrigin(origin)) {
         return callback(null, true);
       }
-      return callback(new Error(`Not allowed by CORS: ${origin}`));
+      console.warn(`[CORS] Request blocked from origin: ${origin}`);
+      return callback(null, false);
     },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    optionsSuccessStatus: 200,
   })
 );
 
